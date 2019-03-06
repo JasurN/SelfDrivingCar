@@ -2,5 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 project(SelfDrivingCar)
 
 set(CMAKE_CXX_STANDARD 11)
-
-add_executable(SelfDrivingCar main.cpp)
+set(CMAKE_CXX_FLAGS "-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core -lraspicam -lraspicam_cv ")
+find_package( OpenCV REQUIRED )
+set(SOURCE_FILES main.cpp edgeDetection.cpp)
+add_executable(SelfDrivingCar ${SOURCE_FILES})
+include_directories(${OpenCV_INCLUDE_DIRS})
+target_link_libraries( SelfDrivingCar ${OpenCV_LIBS} )
