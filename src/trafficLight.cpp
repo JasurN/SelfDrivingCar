@@ -8,26 +8,24 @@
 #include <iostream>
 #include <raspicam/raspicam_cv.h>
 
-using namespace cv;
-using namespace std;
 int main()
 {
 
-	Mat3b bgr;
+	cv::Mat3b bgr;
 	raspicam::RaspiCam_Cv capture;
 
 	capture.open();
 
-	while (1)
+	while (true)
 	{
 		capture.grab();
 		capture.retrieve(bgr);
-		Mat3b hsv;
-		cvtColor(bgr, hsv, COLOR_BGR2HSV);
+        cv::Mat3b hsv;
+		cvtColor(bgr, hsv, cv::COLOR_BGR2HSV);
 
-		Mat1b mask1, mask2;
-		inRange(hsv, Scalar(173, 70, 50), Scalar(179, 255, 255), mask1);
-		inRange(hsv, Scalar(38, 70, 50), Scalar(75, 255, 255), mask2);
+        cv::Mat1b mask1, mask2;
+		inRange(hsv, cv::Scalar(173, 70, 50), cv::Scalar(179, 255, 255), mask1);
+		inRange(hsv, cv::Scalar(38, 70, 50), cv::Scalar(75, 255, 255), mask2);
 		imshow("Original", bgr);
 		imshow("RedDetect", mask1);
 		imshow("GreenDetect", mask2);
