@@ -1,4 +1,4 @@
-#include <cstdio.h>
+#include <cstdio>
 #include <wiringPi.h>
 
 #define TRIG_PIN 28
