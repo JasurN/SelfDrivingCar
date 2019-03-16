@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <stdio.h>
 #include <wiringPi.h>
 
 #define TRIG_PIN 28
@@ -7,7 +7,9 @@
 double getDistance();
 
 int main() {
-    if (wiringPiSetup() == -1) {
+    printf("it is here %d\n", wiringPiSetup());
+
+    if (wiringPiSetup() == 0) {
         return -1;
     }
 
