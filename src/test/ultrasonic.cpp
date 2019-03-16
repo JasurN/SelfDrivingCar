@@ -4,29 +4,28 @@
 #define TRIG_PIN 28
 #define ECHO_PIN 29
 
-double getDistance();
+int getDistance();
 
 int main() {
-    printf("it is here %d\n", wiringPiSetup());
 
-    if (wiringPiSetup() == 0) {
-        return -1;
+    if (wiringPiSetup() == -1) {
+        return 0;
     }
 
     pinMode(TRIG_PIN, OUTPUT);
     pinMode(ECHO_PIN, INPUT);
 
     while (true) {
-        printf("distance %f cm", getDistance());
+        printf("distance %d cm\n", getDistance());
         delay(100);
     }
     return 0;
 }
 
-double getDistance() {
+int getDistance() {
     int start_time = 0;
     int end_time = 0;
-    double distance = 0;
+    float distance = 0;
 
     digitalWrite(TRIG_PIN, LOW);
     delay(500);
@@ -41,5 +40,5 @@ double getDistance() {
     end_time = micros();
 
     distance = (end_time - start_time) / 29. / 2.;
-    return distance;
+    return (int)distance;
 }
