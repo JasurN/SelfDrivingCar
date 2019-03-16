@@ -10,8 +10,9 @@ find_package(raspicam REQUIRED)
 find_package( OpenCV REQUIRED )
 
 set(SOURCE_FILES src/main.cpp src/test/edgeDetection.cpp src/test/lineDetection.cpp
-        src/test/trafficLight.cpp src/test/motorControl.cpp src/test/motorSpeedControl.cpp
-        src/test/IR_sensor.cpp src/test/IR_line_tracer.cpp src/test/ultrasonic.cpp)
+        src/test/trafficLight.cpp src/test/hardware/motorControl.cpp src/test/hardware/motorSpeedControl.cpp
+        src/test/hardware/IR_sensor.cpp src/test/hardware/IR_line_tracer.cpp src/test/hardware/ultrasonic.cpp
+        src/test/colorConversion.cpp)
 add_executable(SelfDrivingCar ${SOURCE_FILES} )
 include_directories(${OpenCV_INCLUDE_DIRS})
 
