@@ -25,6 +25,7 @@ int gCnt = 3;
 int gSpeed = MIN_SPEED;
 
 int main(void) {
+    ctrl_c_stop_motor_signal_handler();
     int nLevel = 0;
 
     if (wiringPiSetup() == -1){
