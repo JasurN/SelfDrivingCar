@@ -97,7 +97,6 @@ void ctrl_c_stop_motor_signal_handler(){
     sigIntHandler.sa_flags = 0;
 
     sigaction(SIGINT, &sigIntHandler, NULL);
-    pause();
 }
 
 
