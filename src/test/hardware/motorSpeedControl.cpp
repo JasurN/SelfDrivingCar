@@ -61,9 +61,9 @@ void initDCMotor() {
 //-DC motor go-----------------------------------------------------------------------------------------------
 void go() {
     softPwmWrite(IN1_PIN, gSpeed);
-    softPwmWrite(IN2_PIN, MIN_SPEED);
+    softPwmWrite(IN2_PIN, gSpeed);
     softPwmWrite(IN3_PIN, gSpeed);
-    softPwmWrite(IN4_PIN, MIN_SPEED);
+    softPwmWrite(IN4_PIN, gSpeed);
     printf("go\n");
 }
 
