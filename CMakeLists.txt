@@ -12,7 +12,8 @@ find_package( OpenCV REQUIRED )
 set(SOURCE_FILES src/main.cpp "src/test/image processing/edgeDetection.cpp" "src/test/image processing/lineDetection.cpp"
         "src/test/image processing/trafficLight.cpp" src/test/hardware/motorControl.cpp src/test/hardware/motorSpeedControl.cpp
         src/test/hardware/IR_sensor.cpp src/test/hardware/IR_line_tracer.cpp src/test/hardware/ultrasonic.cpp
-        "src/test/image processing/colorConversion.cpp" "src/test/image processing/shapeDetection.cpp")
+        "src/test/image processing/colorConversion.cpp" "src/test/image processing/shapeDetection.cpp"
+        src/test/hmw3/task1.cpp src/test/util/tangent_angle.cpp)
 add_executable(SelfDrivingCar ${SOURCE_FILES} )
 include_directories(${OpenCV_INCLUDE_DIRS})
 
