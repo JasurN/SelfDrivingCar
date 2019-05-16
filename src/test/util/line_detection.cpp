@@ -72,7 +72,7 @@ int main() {
         right_frame = dst(right_roi);
 
         directionPrediction(left_angle_find(left_frame),
-                right_andgle_find(right_frame));
+                            right_andgle_find(right_frame));
         imshow("full", dst);
         imshow("left", left_frame);
         imshow("right", right_frame);
@@ -89,7 +89,7 @@ int main() {
 }
 
 int directionPrediction(double left_angle, double right_angle) {
-    if (left_angle > 39 &&  left_angle < 50) {
+    if (left_angle > 39 && left_angle < 50) {
         return TURN_LEFT_45D;
     }
     if (right_angle > 39 && right_angle < 50) {
@@ -109,9 +109,9 @@ double right_andgle_find(const Mat &right_frame) {
             double up_point_angle = ((atan2(RIGHT_up_y, RIGHT_up_x)) * 180 / 3.1415);
 //            std::cout << "low right angle: " << low_point_angle << endl;
 //            std::cout << "up right angle: " << up_point_angle << endl;
-
-            std::cout << "right difference: " << low_point_angle - up_point_angle  << endl;
-            return up_point_angle - low_point_angle;
+            double right_angle = up_point_angle - low_point_angle;
+            std::cout << "right difference: " << right_angle << endl;
+            return right_angle;
         }
     }
     return -1;
@@ -127,13 +127,14 @@ double left_angle_find(const Mat &left_frame) {
         bool isLine = check_left_line(left_frame);
 
         if (isLine) {
-            double low_point_angle = ((atan2(LEFT_low_y, LEFT_low_x)) * 180 / 3.1415);
-            double up_point_angle = ((atan2(LEFT_up_y, LEFT_up_x)) * 180 / 3.1415);
+            double low_point_angle = ((atan2(160 - LEFT_low_y, 90 - LEFT_low_x)) * 180 / 3.1415);
+            double up_point_angle = ((atan2(160 - LEFT_up_y, 90 - LEFT_up_x)) * 180 / 3.1415);
 //            std::cout << "low point: " << low_point_angle << endl;
 //            std::cout << "up point: " << up_point_angle << endl;
 
-            std::cout << "left difference: " << low_point_angle - up_point_angle << endl;
-            return low_point_angle - up_point_angle;
+            double left_angle = up_point_angle - low_point_angle;
+            std::cout << "left difference: " << left_angle << endl;
+            return left_angle;
 
         }
 
