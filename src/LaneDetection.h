@@ -46,13 +46,13 @@ private:
     int LEFT_low_y = 60;
     int LEFT_low_x = 0;
 
-    int LEFT_up_y = 34;
+    int LEFT_up_y = 40;
     int LEFT_up_x = 0;
 
     int RIGHT_low_y = 60;
     int RIGHT_low_x = 0;
 
-    int RIGHT_up_y = 34;
+    int RIGHT_up_y = 40;
     int RIGHT_up_x = 0;
 
     int left_directionCounter = 0;

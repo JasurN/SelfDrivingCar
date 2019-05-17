@@ -5,8 +5,8 @@ LaneDetection::LaneDetection() {
 }
 
 int LaneDetection::directionPrediction(double left_angle, double right_angle) {
-    std::cout << "left angle" << left_angle << std::endl;
-    std::cout << "right angle" << right_angle << std::endl;
+    //std::cout << "left angle" << left_angle << std::endl;
+    //std::cout << "right angle" << right_angle << std::endl;
 
     if (left_angle > 13) {
         left_directionCounter++;

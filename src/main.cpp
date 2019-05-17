@@ -2,10 +2,16 @@
 #include "LaneDetection.h"
 #include "MotorControl.h"
 #include <pthread.h>
-void *leftLaneTurnThread(void *threadarg);
+#include <signal.h>
 
 MotorControl motorControl;
 LaneDetection laneDetection;
+
+
+void *leftLaneTurnThread(void *threadarg);
+void *rightLaneTurnThread(void *threadarg);
+void my_handler(int s);
+void ctrl_c_stop_motor_signal_handler();
 
 int main() {
 
@@ -25,6 +31,12 @@ int main() {
     pthread_t pthreads[2];
 //    src = cv::imread("../12.png");
 //    resize(src, src, cv::Size(320, 240));
+
+    motorControl.goForward();
+    motorControl.setMotorGoing(true);
+    motorControl.setMotorGoingForward(true);
+    ctrl_c_stop_motor_signal_handler();
+
     while (true) {
         capture.grab();
         capture.retrieve(src);
@@ -38,28 +50,28 @@ int main() {
 
         laneDetection.directionPrediction(laneDetection.left_angle_find(left_frame),
                                           laneDetection.right_angle_find(right_frame));
-
-
-        motorControl.goForward();
-        motorControl.setMotorGoing(true);
-        motorControl.setMotorGoingForward(true);
+        //left turn thread
         if(laneDetection.getLeftDirectionCounter() >= 3
            && !motorControl.isMotorGoingLeft()) {
+            motorControl.setMotorGoingLeft(true);
             laneDetection.setLeftDirectionCounter(0);
-            int left_thread_result = pthread_create(&pthreads[0], NULL, leftLaneTurnThread, (void *) 1);;
+            int left_thread_result = pthread_create(&pthreads[0], nullptr, leftLaneTurnThread, (void *) 1);
             if (left_thread_result) {
-                std::cout << "Error:unable to create thread," << left_thread_result << std::endl;
+                std::cout << "Error:unable to create left go thread," << left_thread_result << std::endl;
             }
-            //left turn thread
+            //right turn thread
         } else if (laneDetection.getRightDirectionCounter() >= 3) {
             laneDetection.setRightDirectionCounter(0);
-            //right turn
+            int right_thread_result = pthread_create(&pthreads[0], nullptr, rightLaneTurnThread, (void *) 2);
+            if (right_thread_result) {
+                std::cout << "Error:unable to create right go thread," << right_thread_result << std::endl;
+            }
         }
 
 
-        imshow("full", dst);
-        imshow("left", left_frame);
-        imshow("right", right_frame);
+//        imshow("full", dst);
+//        imshow("left", left_frame);
+//        imshow("right", right_frame);
         //cvWaitKey(200000);
         if (cvWaitKey(20) == 'q') // waitkey
         {
@@ -70,16 +82,53 @@ int main() {
     }
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
 void *leftLaneTurnThread(void *threadarg) {
-    std::cout<<"left thread, started" << std::endl;
+    std::cout<<"turn left thread" << std::endl;
     motorControl.setMotorGoingForward(false);
     motorControl.setMotorGoingLeft(true);
-    delay(500);
+    delay(800);
     motorControl.goCurve(50, 0);
-    delay(2000);
-    motorControl.goForward();
+    delay(1000);
     motorControl.setMotorGoingForward(true);
     motorControl.setMotorGoingLeft(false);
-    pthread_exit(NULL);
+    motorControl.stop();
+    delay(100);
+    motorControl.goForward();
+
+}
+#pragma clang diagnostic pop
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+void *rightLaneTurnThread(void *threadarg) {
+    std::cout << "turn right thread" << std::endl;
+    motorControl.setMotorGoingForward(false);
+    motorControl.setMotorGoingRight(true);
+    delay(800);
+    motorControl.goCurve(0, 50);
+    delay(1000);
+    motorControl.setMotorGoingForward(true);
+    motorControl.setMotorGoingRight(false);
+    motorControl.stop();
+    delay(100);
+    motorControl.goForward();
+}
+#pragma clang diagnostic pop
+
+void my_handler(int s){
+    printf("Caught signal %d\n",s);
+    motorControl.stop();
+
 }
 
+void ctrl_c_stop_motor_signal_handler(){
+    struct sigaction sigIntHandler{};
+
+    sigIntHandler.sa_handler = my_handler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
+
+    sigaction(SIGINT, &sigIntHandler, nullptr);
+}
