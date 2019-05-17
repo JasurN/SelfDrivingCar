@@ -120,9 +120,9 @@ bool LaneDetection::check_right_line(const cv::Mat &right_frame) {
             break;
         }
     }
-    std::cout << "left counter" << true_count << std::endl;
+    //std::cout << "right counter" << true_count << std::endl;
 
-    return true_count > 1;
+    return true_count > 2;
 }
 
 bool LaneDetection::check_left_line(cv::Mat left_frame) {
@@ -162,7 +162,7 @@ bool LaneDetection::check_left_line(cv::Mat left_frame) {
             break;
         }
     }
-    std::cout << "left counter" << true_count << std::endl;
+    //std::cout << "left counter" << true_count << std::endl;
     return true_count > 2;
 }
 

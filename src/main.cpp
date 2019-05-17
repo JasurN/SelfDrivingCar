@@ -74,9 +74,9 @@ void *leftLaneTurnThread(void *threadarg) {
     std::cout<<"left thread, started" << std::endl;
     motorControl.setMotorGoingForward(false);
     motorControl.setMotorGoingLeft(true);
-    delay(1000);
+    delay(500);
     motorControl.goCurve(50, 0);
-    delay(1000);
+    delay(2000);
     motorControl.goForward();
     motorControl.setMotorGoingForward(true);
     motorControl.setMotorGoingLeft(false);
