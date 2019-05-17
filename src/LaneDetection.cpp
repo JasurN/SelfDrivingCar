@@ -9,10 +9,10 @@ int LaneDetection::directionPrediction(double left_angle, double right_angle) {
     std::cout << "right angle" << right_angle << std::endl;
 
     if (left_angle > 13) {
-        return TURN_LEFT;
+        left_directionCounter++;
     }
     else if (right_angle > 13) {
-        return TURN_RIGHT;
+        rightDirectionCounter++;
     }
 }
 
@@ -188,6 +188,22 @@ void LaneDetection::left_upper_point(cv::Mat left_frame) {
         }
     }
     // cout << endl << "LEFT_up_x :" << LEFT_up_x;
+}
+
+int LaneDetection::getLeftDirectionCounter() const {
+    return left_directionCounter;
+}
+
+void LaneDetection::setLeftDirectionCounter(int leftDirectionCounter) {
+    left_directionCounter = leftDirectionCounter;
+}
+
+int LaneDetection::getRightDirectionCounter() const {
+    return rightDirectionCounter;
+}
+
+void LaneDetection::setRightDirectionCounter(int rightDirectionCounter) {
+    LaneDetection::rightDirectionCounter = rightDirectionCounter;
 }
 
 

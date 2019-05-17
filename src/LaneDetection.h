@@ -1,7 +1,6 @@
 #ifndef SELFDRIVINGCAR_LANEDETECTION_H
 #define SELFDRIVINGCAR_LANEDETECTION_H
 
-#define GO_FORWARD 0
 #define TURN_LEFT 1
 #define TURN_RIGHT 2
 
@@ -35,6 +34,14 @@ public:
 
     int directionPrediction(double left_angle, double right_angle);
 
+    int getLeftDirectionCounter() const;
+
+    void setLeftDirectionCounter(int leftDirectionCounter);
+
+    int getRightDirectionCounter() const;
+
+    void setRightDirectionCounter(int rightDirectionCounter);
+
 private:
     int LEFT_low_y = 60;
     int LEFT_low_x = 0;
@@ -47,6 +54,11 @@ private:
 
     int RIGHT_up_y = 34;
     int RIGHT_up_x = 0;
+
+    int left_directionCounter = 0;
+    int rightDirectionCounter = 0;
+
+
 };
 
 #endif //SELFDRIVINGCAR_LANEDETECTION_H

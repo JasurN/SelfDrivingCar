@@ -19,7 +19,11 @@ MotorControl::MotorControl()
 	IN2_PIN = 4; // left
 	IN3_PIN = 5; // right
 	IN4_PIN = 6; // right
-    
+    motorGoing = false;
+    motorGoingForward = false;
+    motorGoingBackward = false;
+    motorGoingLeft = false;
+    motorGoingRight = false;
 	init();
 }
 
@@ -68,16 +72,16 @@ void MotorControl::goBack()
 	printf("Go Backward \n");
 }
 
-void MotorControl::goCurve(int leftVal, int rightVal)
+void MotorControl::goCurve(int leftSpeed, int rightSpeed)
 {
     softPwmWrite(IN1_PIN, MAX_SPEED);
     softPwmWrite(IN2_PIN, MIN_SPEED);
     softPwmWrite(IN3_PIN, MAX_SPEED);
     softPwmWrite(IN4_PIN, MIN_SPEED);
     delay(MOTOR_START_DELAY);
-    softPwmWrite(IN1_PIN, leftVal);
+    softPwmWrite(IN1_PIN, leftSpeed);
     softPwmWrite(IN2_PIN, MIN_SPEED);
-    softPwmWrite(IN3_PIN, rightVal);
+    softPwmWrite(IN3_PIN, rightSpeed);
     softPwmWrite(IN4_PIN, MIN_SPEED);
     printf("LeftCurve\n");
 }
@@ -161,6 +165,46 @@ void MotorControl::goRightCurve(int leftVal, int rightVal)
 	softPwmWrite(IN3_PIN, rightVal);
 	softPwmWrite(IN4_PIN, MIN_SPEED);
 	printf("RightPoint\n");
+}
+
+bool MotorControl::isMotorGoing() const {
+    return motorGoing;
+}
+
+void MotorControl::setMotorGoing(bool motorGoingParam) {
+    MotorControl::motorGoing = motorGoingParam;
+}
+
+bool MotorControl::isMotorGoingForward() const {
+    return motorGoingForward;
+}
+
+void MotorControl::setMotorGoingForward(bool motorGoingForwardParam) {
+    MotorControl::motorGoingForward = motorGoingForwardParam;
+}
+
+bool MotorControl::isMotorGoingBackward() const {
+    return motorGoingBackward;
+}
+
+void MotorControl::setMotorGoingBackward(bool motorGoingBackwardParam) {
+    MotorControl::motorGoingBackward = motorGoingBackwardParam;
+}
+
+bool MotorControl::isMotorGoingLeft() const {
+    return motorGoingLeft;
+}
+
+void MotorControl::setMotorGoingLeft(bool motorGoingLeftParam) {
+    MotorControl::motorGoingLeft = motorGoingLeftParam;
+}
+
+bool MotorControl::isMotorGoingRight() const {
+    return motorGoingRight;
+}
+
+void MotorControl::setMotorGoingRight(bool motorGoingRightParam) {
+    MotorControl::motorGoingRight = motorGoingRightParam;
 }
 
 
