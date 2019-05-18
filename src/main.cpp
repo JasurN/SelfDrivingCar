@@ -125,7 +125,7 @@ void *irLineTracerThread(void *threadarg) {
             motorControl.goForward();
         } else if (left_ir_tracer == 0 && right_ir_tracer == 1) {
             std::cout << "go right" << std::endl;
-            motorControl.goCurve(50, 0);
+            //motorControl.goCurve(50, 0);
             delay(400);
             motorControl.goForward();
         } else if (left_ir_tracer == 0 && right_ir_tracer == 0) {
