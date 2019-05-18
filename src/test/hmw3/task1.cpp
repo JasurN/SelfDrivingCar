@@ -17,7 +17,7 @@
 //#define NORMAL_SPEED   50
 //#define MIN_SPEED   0
 //
-//void initDCMotor();
+//void initSensorsDCMotor();
 //
 //void go();
 //
@@ -42,7 +42,7 @@
 //        return 0;
 //    }
 //    ctrl_c_stop_motor_signal_handler();
-//    initDCMotor();
+//    initSensorsDCMotor();
 //    pinMode(LEFT_IR_PIN, INPUT);
 //    pinMode(RIGHT_IR_PIN, INPUT);
 //
@@ -99,7 +99,7 @@
 //
 //
 ////-Motor Initialize-------------------------------------------------------------
-//void initDCMotor() {
+//void initSensorsDCMotor() {
 //    pinMode(IN1_PIN, SOFT_PWM_OUTPUT);
 //    pinMode(IN2_PIN, SOFT_PWM_OUTPUT);
 //    pinMode(IN3_PIN, SOFT_PWM_OUTPUT);

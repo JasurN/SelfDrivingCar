@@ -2,14 +2,11 @@
 #include <wiringPi.h>
 #include <string.h>
 #include <softPwm.h>
-#include <stdlib.h>
 #include <iostream>
-#include <string>
 #include <opencv/cv.h>
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc.hpp"
 #include <raspicam/raspicam_cv.h>
-#include <opencv2/objdetect/objdetect.hpp>
 
 using namespace cv;
 using namespace std;
@@ -28,28 +25,22 @@ using namespace std;
 
 #define MIN_SPEED   0
 
-
-
-void initDCMotor();
+void initSensorsDCMotor();
 void goForward();
 void goLeft();
 void goRight();
 void stopDCMotor();
 void checkControl();
 int getDistance();
-
-//Declaration of functions Hardware
 void setup();
 
-//GV for line detect
 
 // Global variables for traffic light detection
-raspicam::RaspiCam_Cv capture;
 static unsigned char LINE[] = {21,22,26};
 
 
 
-int main(void)
+int main()
 {
     if(wiringPiSetup() == -1)
         return 0;
@@ -59,7 +50,7 @@ int main(void)
     pinMode(IN3_PIN, OUTPUT);
     pinMode(IN4_PIN, OUTPUT);
 
-    initDCMotor();
+    initSensorsDCMotor();
 
 
     setup();
@@ -72,13 +63,12 @@ int main(void)
         checkControl();
     }
 
-    capture.release();
 
 
     return 0;
 }
 
-void initDCMotor()
+void initSensorsDCMotor()
 {
     pinMode(TRIG_PIN, OUTPUT);
     pinMode(ECHO_PIN, INPUT);

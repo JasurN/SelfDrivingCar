@@ -25,7 +25,7 @@
 //
 //void my_handler(int s);
 //void ctrl_c_stop_motor_signal_handler();
-//void initDCMotor();
+//void initSensorsDCMotor();
 //
 //void goForward();
 //
@@ -45,7 +45,7 @@
 //    pinMode(IN2_PIN, OUTPUT);
 //    pinMode(IN3_PIN, OUTPUT);
 //    pinMode(IN4_PIN, OUTPUT);
-//    initDCMotor();
+//    initSensorsDCMotor();
 //    while (gCnt > 0) {
 //        goLeft();
 //        delay(500);
@@ -57,7 +57,7 @@
 //    return 0;
 //}
 //
-//void initDCMotor() {
+//void initSensorsDCMotor() {
 //    digitalWrite(IN1_PIN, HIGH);
 //    digitalWrite(IN2_PIN, HIGH);
 //    digitalWrite(IN3_PIN, HIGH);

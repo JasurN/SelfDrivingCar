@@ -13,7 +13,7 @@
 #define NORMAL_SPEED  40
 #define MIN_SPEED   0
 
-void initDCMotor();
+void initSensorsDCMotor();
 
 void go();
 
@@ -32,7 +32,7 @@ int main(void) {
         return 0;
     }
 
-    initDCMotor();
+    initSensorsDCMotor();
 
     while (gCnt >= 0) {
         printf("gCnt = %d\n", gCnt);
@@ -54,7 +54,7 @@ int main(void) {
 
 
 //-Motor Initialize-------------------------------------------------------------
-void initDCMotor() {
+void initSensorsDCMotor() {
     pinMode(IN1_PIN, SOFT_PWM_OUTPUT);
     pinMode(IN2_PIN, SOFT_PWM_OUTPUT);
     pinMode(IN3_PIN, SOFT_PWM_OUTPUT);

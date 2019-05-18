@@ -22,7 +22,7 @@
 //using namespace std;
 //using namespace cv;
 //
-//void initDCMotor();
+//void initSensorsDCMotor();
 //void goForward();
 //void stop();
 //void my_handler(int s);
@@ -34,7 +34,7 @@
 //        return -1;
 //    }
 //
-//    initDCMotor();
+//    initSensorsDCMotor();
 //    ctrl_c_stop_motor_signal_handler();
 //    bool motorRedStop = false;
 //    bool motorGoing = false;
@@ -130,7 +130,7 @@
 //}
 //
 ////-Motor Initialize-------------------------------------------------------------
-//void initDCMotor() {
+//void initSensorsDCMotor() {
 //    pinMode(IN1_PIN, SOFT_PWM_OUTPUT);
 //    pinMode(IN2_PIN, SOFT_PWM_OUTPUT);
 //    pinMode(IN3_PIN, SOFT_PWM_OUTPUT);
