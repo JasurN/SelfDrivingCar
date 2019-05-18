@@ -16,7 +16,7 @@ set(SOURCE_FILES "src/test/image processing/edgeDetection.cpp"
         src/test/hmw3/task1.cpp src/test/util/tangent_angle.cpp "src/test/image processing/zebraPatern.cpp" "src/test/image processing/trafficLight.cpp"
         src/test/util/imageAnalyse.cpp src/main.cpp
         src/test/util/test.cpp
-        src/MotorControl.cpp src/MotorControl.h src/LaneDetection.h src/LaneDetection.cpp src/test/util/thread.cpp src/test/SherzodbekTest.cpp)
+        src/MotorControl.cpp src/MotorControl.h src/LaneDetection.h src/LaneDetection.cpp src/test/util/thread.cpp src/test/SherzodbekTest.cpp src/delayCheck.cpp)
 add_executable(SelfDrivingCar ${SOURCE_FILES} )
 include_directories(${OpenCV_INCLUDE_DIRS})
 
