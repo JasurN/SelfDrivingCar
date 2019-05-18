@@ -120,6 +120,7 @@ void *rightLaneTurnThread(void *threadarg) {
 void my_handler(int s){
     printf("Caught signal %d\n",s);
     motorControl.stop();
+    exit(1);
 
 }
 
