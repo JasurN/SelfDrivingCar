@@ -16,6 +16,7 @@ int main() {
         nLValue = digitalRead(LEFT_TRACER_PIN);
         nRValue = digitalRead(RIGHT_TRACER_PIN);
         printf("R = %d, L = %d\n", nRValue, nLValue);
+	delay(10);
     }
     return 0;
 }
