@@ -118,20 +118,28 @@ void *irLineTracerThread(void *threadarg) {
     left_ir_tracer = digitalRead(LEFT_TRACER_PIN);
     right_ir_tracer = digitalRead(RIGHT_TRACER_PIN);
     while (true) {
-        if (left_ir_tracer == 0 && right_ir_tracer == 1) {
+        if (left_ir_tracer == 0 && right_ir_tracer == 1
+            && !motorControl.turningIrLeft) {
+            motorControl.turningIrLeft = true;
             std::cout << "go left" << std::endl;
-            //motorControl.goCurve(50, 0);
+            motorControl.goCurve(0, 50);
             delay(400);
-            //motorControl.goForward();
-        } else if (left_ir_tracer == 1 && right_ir_tracer == 0) {
+            motorControl.goForward();
+            motorControl.turningIrLeft = false;
+
+        } else if (left_ir_tracer == 1 && right_ir_tracer == 0
+                   && !motorControl.turningIrRight) {
+            motorControl.turningIrRight = true;
             std::cout << "go right" << std::endl;
-            //motorControl.goCurve(0, 50);
+            motorControl.goCurve(50, 0);
             delay(400);
-            //motorControl.goForward();
+            motorControl.goForward();
+            motorControl.turningIrRight = false;
+
         } else if (left_ir_tracer == 0 && right_ir_tracer == 0) {
             std::cout << "zebra" << std::endl;
         }
-        printf("L = %d, R = %d\n",  left_ir_tracer, right_ir_tracer);
+        printf("L = %d, R = %d\n", left_ir_tracer, right_ir_tracer);
         delay(10);
     }
 }

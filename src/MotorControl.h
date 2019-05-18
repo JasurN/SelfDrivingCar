@@ -52,7 +52,8 @@ public:
     bool isMotorGoingRight() const;
 
     void setMotorGoingRight(bool motorGoingRightParam);
-
+    bool turningIrLeft = false;
+    bool turningIrRight = false;
 private:
     int IN1_PIN;
     int IN2_PIN;
@@ -63,6 +64,7 @@ private:
 	bool motorGoingBackward;
 	bool motorGoingLeft;
 	bool motorGoingRight;
+
 };
 
 #endif // _MotorControl_H__
