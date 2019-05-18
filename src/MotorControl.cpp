@@ -5,7 +5,7 @@
 #define PWM_INIT_VAL       	0
 #define PWM_RANGE          	100
 
-#define MAX_SPEED       	100
+#define NORMAL_SPEED       	100
 #define NORM_SPEED       	50
 #define TURN_SPEED       	50 // 50
 #define MIN_SPEED       	0
@@ -56,9 +56,9 @@ void MotorControl::init()
 
 void MotorControl::goForward()
 {
-	softPwmWrite(IN1_PIN, MAX_SPEED);
+	softPwmWrite(IN1_PIN, NORMAL_SPEED);
 	softPwmWrite(IN2_PIN, MIN_SPEED);
-	softPwmWrite(IN3_PIN, MAX_SPEED);
+	softPwmWrite(IN3_PIN, NORMAL_SPEED);
 	softPwmWrite(IN4_PIN, MIN_SPEED);
 	delay(MOTOR_START_DELAY);
 	softPwmWrite(IN1_PIN, NORM_SPEED);
@@ -72,9 +72,9 @@ void MotorControl::goForward()
 void MotorControl::goBack()
 {
 	softPwmWrite(IN1_PIN, MIN_SPEED);
-	softPwmWrite(IN2_PIN, MAX_SPEED);
+	softPwmWrite(IN2_PIN, NORMAL_SPEED);
 	softPwmWrite(IN3_PIN, MIN_SPEED);
-	softPwmWrite(IN4_PIN, MAX_SPEED);
+	softPwmWrite(IN4_PIN, NORMAL_SPEED);
 	delay(MOTOR_START_DELAY);
 	softPwmWrite(IN1_PIN, MIN_SPEED);
 	softPwmWrite(IN2_PIN, NORM_SPEED);
@@ -86,9 +86,9 @@ void MotorControl::goBack()
 
 void MotorControl::goCurve(int leftSpeed, int rightSpeed)
 {
-    softPwmWrite(IN1_PIN, MAX_SPEED);
+    softPwmWrite(IN1_PIN, NORMAL_SPEED);
     softPwmWrite(IN2_PIN, MIN_SPEED);
-    softPwmWrite(IN3_PIN, MAX_SPEED);
+    softPwmWrite(IN3_PIN, NORMAL_SPEED);
     softPwmWrite(IN4_PIN, MIN_SPEED);
     delay(MOTOR_START_DELAY);
     softPwmWrite(IN1_PIN, leftSpeed);
@@ -111,7 +111,7 @@ void MotorControl::goLeftSwing()
 {
 	softPwmWrite(IN1_PIN, MIN_SPEED);
 	softPwmWrite(IN2_PIN, MIN_SPEED);
-	softPwmWrite(IN3_PIN, MAX_SPEED);
+	softPwmWrite(IN3_PIN, NORMAL_SPEED);
 	softPwmWrite(IN4_PIN, MIN_SPEED);
 	delay(MOTOR_START_DELAY);
 	softPwmWrite(IN1_PIN, MIN_SPEED);
@@ -124,7 +124,7 @@ void MotorControl::goLeftSwing()
 
 void MotorControl::goRightSwing()
 {
-	softPwmWrite(IN1_PIN, MAX_SPEED);
+	softPwmWrite(IN1_PIN, NORMAL_SPEED);
 	softPwmWrite(IN2_PIN, MIN_SPEED);
 	softPwmWrite(IN3_PIN, MIN_SPEED);
 	softPwmWrite(IN4_PIN, MIN_SPEED);
@@ -140,8 +140,8 @@ void MotorControl::goRightSwing()
 void MotorControl::goLeftPoint()
 {
 	softPwmWrite(IN1_PIN, MIN_SPEED);
-	softPwmWrite(IN2_PIN, MAX_SPEED);
-	softPwmWrite(IN3_PIN, MAX_SPEED);
+	softPwmWrite(IN2_PIN, NORMAL_SPEED);
+	softPwmWrite(IN3_PIN, NORMAL_SPEED);
 	softPwmWrite(IN4_PIN, MIN_SPEED);
 	delay(MOTOR_START_DELAY);
 	softPwmWrite(IN1_PIN, MIN_SPEED);
@@ -153,10 +153,10 @@ void MotorControl::goLeftPoint()
 
 void MotorControl::goRightPoint()
 {
-	softPwmWrite(IN1_PIN, MAX_SPEED);
+	softPwmWrite(IN1_PIN, NORMAL_SPEED);
 	softPwmWrite(IN2_PIN, MIN_SPEED);
 	softPwmWrite(IN3_PIN, MIN_SPEED);
-	softPwmWrite(IN4_PIN, MAX_SPEED);
+	softPwmWrite(IN4_PIN, NORMAL_SPEED);
 	delay(MOTOR_START_DELAY);
 	softPwmWrite(IN1_PIN, NORM_SPEED);
 	softPwmWrite(IN2_PIN, MIN_SPEED);
@@ -167,9 +167,9 @@ void MotorControl::goRightPoint()
 
 void MotorControl::goRightCurve(int leftVal, int rightVal)
 {
-	softPwmWrite(IN1_PIN, MAX_SPEED);
+	softPwmWrite(IN1_PIN, NORMAL_SPEED);
 	softPwmWrite(IN2_PIN, MIN_SPEED);
-	softPwmWrite(IN3_PIN, MAX_SPEED);
+	softPwmWrite(IN3_PIN, NORMAL_SPEED);
 	softPwmWrite(IN4_PIN, MIN_SPEED);
 	delay(MOTOR_START_DELAY);
 	softPwmWrite(IN1_PIN, leftVal);

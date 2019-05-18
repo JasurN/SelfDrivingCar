@@ -24,7 +24,8 @@ using namespace std;
 #define IN3_PIN		5							// right motor
 #define IN4_PIN		6							// right motor
 #define LIMIT_DISTANCE  20						//Ultra limit distance for stop
-#define MAX_SPEED   50							//Speed limit
+#define NORMAL_SPEED   50							//Speed limit
+
 #define MIN_SPEED   0
 
 
@@ -89,19 +90,19 @@ void initDCMotor()
     pinMode(IN3_PIN, SOFT_PWM_OUTPUT);
     pinMode(IN4_PIN, SOFT_PWM_OUTPUT);
 
-    softPwmCreate(IN1_PIN, MIN_SPEED, MAX_SPEED);
-    softPwmCreate(IN2_PIN, MIN_SPEED, MAX_SPEED);
-    softPwmCreate(IN3_PIN, MIN_SPEED, MAX_SPEED);
-    softPwmCreate(IN4_PIN, MIN_SPEED, MAX_SPEED);
+    softPwmCreate(IN1_PIN, MIN_SPEED, NORMAL_SPEED);
+    softPwmCreate(IN2_PIN, MIN_SPEED, NORMAL_SPEED);
+    softPwmCreate(IN3_PIN, MIN_SPEED, NORMAL_SPEED);
+    softPwmCreate(IN4_PIN, MIN_SPEED, NORMAL_SPEED);
 }
 
 //Go Forward
 void goForward()
 {
 
-    softPwmWrite(IN1_PIN, MAX_SPEED);
+    softPwmWrite(IN1_PIN, NORMAL_SPEED);
     softPwmWrite(IN2_PIN, MIN_SPEED);
-    softPwmWrite(IN3_PIN, MAX_SPEED);
+    softPwmWrite(IN3_PIN, NORMAL_SPEED);
     softPwmWrite(IN4_PIN, MIN_SPEED);
 
     printf("Forward\n");
@@ -112,9 +113,9 @@ void goBackward()
 {
     softPwmWrite(IN1_PIN, MIN_SPEED);
 
-    softPwmWrite(IN2_PIN, MAX_SPEED);
+    softPwmWrite(IN2_PIN, NORMAL_SPEED);
     softPwmWrite(IN3_PIN, MIN_SPEED);
-    softPwmWrite(IN4_PIN, MAX_SPEED);
+    softPwmWrite(IN4_PIN, NORMAL_SPEED);
 
     printf("Back\n");
 }
@@ -124,8 +125,8 @@ void goLeft()
 {
 
     softPwmWrite(IN1_PIN, MIN_SPEED);
-    softPwmWrite(IN2_PIN, MAX_SPEED);
-    softPwmWrite(IN3_PIN, MAX_SPEED);
+    softPwmWrite(IN2_PIN, NORMAL_SPEED);
+    softPwmWrite(IN3_PIN, NORMAL_SPEED);
     softPwmWrite(IN4_PIN, MIN_SPEED);
 
     printf("Left\n");
@@ -135,10 +136,10 @@ void goLeft()
 void goRight()
 {
 
-    softPwmWrite(IN1_PIN, MAX_SPEED);
+    softPwmWrite(IN1_PIN, NORMAL_SPEED);
     softPwmWrite(IN2_PIN, MIN_SPEED);
     softPwmWrite(IN3_PIN, MIN_SPEED);
-    softPwmWrite(IN4_PIN, MAX_SPEED);
+    softPwmWrite(IN4_PIN, NORMAL_SPEED);
 
     printf("Right\n");
 }

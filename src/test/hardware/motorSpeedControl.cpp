@@ -10,7 +10,7 @@
 #define IN2_PIN 4
 #define IN3_PIN 5
 #define IN4_PIN 6
-#define MAX_SPEED  40
+#define NORMAL_SPEED  40
 #define MIN_SPEED   0
 
 void initDCMotor();
@@ -41,7 +41,7 @@ int main(void) {
             stop();
             delay(1000);
         } else {
-            for (nLevel = 30; nLevel <= MAX_SPEED; ) {
+            for (nLevel = 30; nLevel <= NORMAL_SPEED; ) {
                 gSpeed = nLevel;
                 go();
                 delay(1000);
@@ -59,10 +59,10 @@ void initDCMotor() {
     pinMode(IN2_PIN, SOFT_PWM_OUTPUT);
     pinMode(IN3_PIN, SOFT_PWM_OUTPUT);
     pinMode(IN4_PIN, SOFT_PWM_OUTPUT);
-    softPwmCreate(IN1_PIN, MIN_SPEED, MAX_SPEED);
-    softPwmCreate(IN2_PIN, MIN_SPEED, MAX_SPEED);
-    softPwmCreate(IN3_PIN, MIN_SPEED, MAX_SPEED);
-    softPwmCreate(IN4_PIN, MIN_SPEED, MAX_SPEED);
+    softPwmCreate(IN1_PIN, MIN_SPEED, NORMAL_SPEED);
+    softPwmCreate(IN2_PIN, MIN_SPEED, NORMAL_SPEED);
+    softPwmCreate(IN3_PIN, MIN_SPEED, NORMAL_SPEED);
+    softPwmCreate(IN4_PIN, MIN_SPEED, NORMAL_SPEED);
 }
 
 //-DC motor go-----------------------------------------------------------------------------------------------

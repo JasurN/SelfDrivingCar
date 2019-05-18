@@ -51,6 +51,8 @@ public:
 
     bool isMotorGoingRight() const;
 
+
+
     void setMotorGoingRight(bool motorGoingRightParam);
     bool turningIrLeft = false;
     bool turningIrRight = false;
