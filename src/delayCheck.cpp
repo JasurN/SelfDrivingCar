@@ -9,7 +9,7 @@
 
 #define NORMAL_SPEED   50							//Speed limit
 #define MIN_SPEED   0
-
+#define 1100 delay_turn_45
 
 void testDelay();
 MotorControl motorControl;
