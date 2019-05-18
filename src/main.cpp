@@ -119,10 +119,12 @@ void *irLineTracerThread(void *threadarg) {
     right_ir_tracer = digitalRead(RIGHT_TRACER_PIN);
     while (true) {
         if (left_ir_tracer == 1 && right_ir_tracer == 0) {
+            std::cout << "go left" << std::endl;
             motorControl.goCurve(0, 50);
             delay(400);
             motorControl.goForward();
         } else if (left_ir_tracer == 0 && right_ir_tracer == 1) {
+            std::cout << "go right" << std::endl;
             motorControl.goCurve(50, 0);
             delay(400);
             motorControl.goForward();
