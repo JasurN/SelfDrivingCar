@@ -5,8 +5,8 @@ LaneDetection::LaneDetection() {
 }
 
 int LaneDetection::directionPrediction(double left_angle, double right_angle) {
-    std::cout << "left angle" << left_angle << std::endl;
-    std::cout << "right angle" << right_angle << std::endl;
+    std::cout << "left angle:   " << left_angle << std::endl;
+    std::cout << "right angle:  " << right_angle << std::endl;
 
     if (left_angle > 10) {
         left_directionCounter++;
@@ -28,7 +28,7 @@ double LaneDetection::right_angle_find(const cv::Mat &right_frame) {
             double up_point_angle = ((atan2(RIGHT_up_y, RIGHT_up_x)) * 180 / 3.1415);
 //            std::cout << "low right angle: " << low_point_angle << endl;
 //            std::cout << "up right angle: " << up_point_angle << endl;
-            double right_angle = abs(up_point_angle - low_point_angle);
+            double right_angle = up_point_angle - low_point_angle;
             //std::cout << "right difference: " << right_angle << std::endl;
             return right_angle;
         }
