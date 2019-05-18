@@ -32,7 +32,7 @@ int main() {
 //    src = cv::imread("../12.png");
 //    resize(src, src, cv::Size(320, 240));
 
-    motorControl.goForward();
+//    motorControl.goForward();
     motorControl.setMotorGoing(true);
     motorControl.setMotorGoingForward(true);
     ctrl_c_stop_motor_signal_handler();
@@ -51,22 +51,22 @@ int main() {
         laneDetection.directionPrediction(laneDetection.left_angle_find(left_frame),
                                           laneDetection.right_angle_find(right_frame));
         //left turn thread
-        if(laneDetection.getLeftDirectionCounter() >= 3
-           && !motorControl.isMotorGoingLeft()) {
-            motorControl.setMotorGoingLeft(true);
-            laneDetection.setLeftDirectionCounter(0);
-            int left_thread_result = pthread_create(&pthreads[0], nullptr, leftLaneTurnThread, (void *) 1);
-            if (left_thread_result) {
-                std::cout << "Error:unable to create left go thread," << left_thread_result << std::endl;
-            }
-            //right turn thread
-        } else if (laneDetection.getRightDirectionCounter() >= 3) {
-            laneDetection.setRightDirectionCounter(0);
-            int right_thread_result = pthread_create(&pthreads[0], nullptr, rightLaneTurnThread, (void *) 2);
-            if (right_thread_result) {
-                std::cout << "Error:unable to create right go thread," << right_thread_result << std::endl;
-            }
-        }
+//        if(laneDetection.getLeftDirectionCounter() >= 3
+//           && !motorControl.isMotorGoingLeft()) {
+//            motorControl.setMotorGoingLeft(true);
+//            laneDetection.setLeftDirectionCounter(0);
+//            int left_thread_result = pthread_create(&pthreads[0], nullptr, leftLaneTurnThread, (void *) 1);
+//            if (left_thread_result) {
+//                std::cout << "Error:unable to create left go thread," << left_thread_result << std::endl;
+//            }
+//            //right turn thread
+//        } else if (laneDetection.getRightDirectionCounter() >= 3) {
+//            laneDetection.setRightDirectionCounter(0);
+//            int right_thread_result = pthread_create(&pthreads[0], nullptr, rightLaneTurnThread, (void *) 2);
+//            if (right_thread_result) {
+//                std::cout << "Error:unable to create right go thread," << right_thread_result << std::endl;
+//            }
+//        }
 
 
         imshow("full", dst);
