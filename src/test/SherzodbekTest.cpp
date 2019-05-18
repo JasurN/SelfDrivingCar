@@ -154,34 +154,40 @@ int getDistance() {
 }
 
 
-//IR tracker
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
+
 void *checkControl(void *threadarg) {
-    while (true){
-    int nLValue = digitalRead(LEFT_TRACER_PIN);
-    int nRValue = digitalRead(RIGHT_TRACER_PIN);
-    int dis = getDistance();
+    bool ultrasonicStopped = false;
+    while (true) {
+        int nLValue = digitalRead(LEFT_TRACER_PIN);
+        int nRValue = digitalRead(RIGHT_TRACER_PIN);
+        int dis = getDistance();
 
-    if ((nLValue == HIGH) && (nRValue == HIGH)) {
-        if (dis <= LIMIT_DISTANCE) {
-            printf("distance - %d cm\n", dis);
+        if ((nLValue == HIGH) && (nRValue == HIGH)) {
+            if (dis <= LIMIT_DISTANCE && !ultrasonicStopped) {
+                ultrasonicStopped = true;
+                printf("distance - %d cm\n", dis);
+                stopDCMotor();
+            } else if (ultrasonicStopped) {
+                std::cout << std::endl << "STOOPEEDDDDDDDDDDDD";
+            } else {
+                goForward();
 
-            stopDCMotor();
+            }
+        } else if (nLValue == HIGH && nRValue == LOW) {
+            printf(" LEFT detect ~!!! MOVE  ");
+            goLeft();
+        } else if (nRValue == HIGH && nLValue == LOW) {
+            printf(" RIGHT detect ~!!! MOVE  ");
+            goRight();
         } else {
-            goForward();
-
-
+            stopDCMotor();
         }
-    } else if (nLValue == HIGH) {
-        printf(" LEFT detect ~!!! MOVE  ");
-        goLeft();
-    } else if (nRValue == HIGH) {
-        printf(" RIGHT detect ~!!! MOVE  ");
-        goRight();
-    } else {
-        stopDCMotor();
-    }
     }
 }
+
+#pragma clang diagnostic pop
 
 
 
