@@ -37,7 +37,7 @@ int main() {
 //    src = cv::imread("../12.png");
 //    resize(src, src, cv::Size(320, 240));
 
-    motorControl.goForward();
+    //motorControl.goForward();
     motorControl.setMotorGoing(true);
     motorControl.setMotorGoingForward(true);
     ctrl_c_stop_motor_signal_handler();
@@ -118,19 +118,20 @@ void *irLineTracerThread(void *threadarg) {
     left_ir_tracer = digitalRead(LEFT_TRACER_PIN);
     right_ir_tracer = digitalRead(RIGHT_TRACER_PIN);
     while (true) {
-        if (left_ir_tracer == 1 && right_ir_tracer == 0) {
+        if (left_ir_tracer == 0 && right_ir_tracer == 1) {
             std::cout << "go left" << std::endl;
-            motorControl.goCurve(0, 50);
-            delay(400);
-            motorControl.goForward();
-        } else if (left_ir_tracer == 0 && right_ir_tracer == 1) {
-            std::cout << "go right" << std::endl;
             //motorControl.goCurve(50, 0);
             delay(400);
-            motorControl.goForward();
+            //motorControl.goForward();
+        } else if (left_ir_tracer == 1 && right_ir_tracer == 0) {
+            std::cout << "go right" << std::endl;
+            //motorControl.goCurve(0, 50);
+            delay(400);
+            //motorControl.goForward();
         } else if (left_ir_tracer == 0 && right_ir_tracer == 0) {
             std::cout << "zebra" << std::endl;
         }
+        printf("L = %d, R = %d\n",  left_ir_tracer, right_ir_tracer);
         delay(10);
     }
 }
