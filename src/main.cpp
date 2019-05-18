@@ -9,8 +9,13 @@ LaneDetection laneDetection;
 
 
 void *leftLaneTurnThread(void *threadarg);
+
 void *rightLaneTurnThread(void *threadarg);
+
+void *irLineTracerThread(void *threadarg);
+
 void my_handler(int s);
+
 void ctrl_c_stop_motor_signal_handler();
 
 int main() {
@@ -68,7 +73,10 @@ int main() {
 //            }
 //        }
 
-
+        int ir_line_thread_result = pthread_create(&pthreads[0], nullptr, irLineTracerThread, (void *) 3);
+        if (ir_line_thread_result) {
+                std::cout << "Error:unable to create left go thread," << ir_line_thread_result << std::endl;
+            }
         imshow("full", dst);
         imshow("left", left_frame);
         imshow("right", right_frame);
@@ -81,11 +89,12 @@ int main() {
         }
     }
 }
-
+//left line thread
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
+
 void *leftLaneTurnThread(void *threadarg) {
-    std::cout<<"turn left thread" << std::endl;
+    std::cout << "turn left thread" << std::endl;
     motorControl.setMotorGoingForward(false);
     motorControl.setMotorGoingLeft(true);
     delay(400);
@@ -98,10 +107,31 @@ void *leftLaneTurnThread(void *threadarg) {
     motorControl.goForward();
 
 }
+
 #pragma clang diagnostic pop
 
+void *irLineTracerThread(void *threadarg) {
+    int left_ir_tracer, right_ir_tracer;
+    left_ir_tracer = digitalRead(LEFT_TRACER_PIN);
+    right_ir_tracer = digitalRead(RIGHT_TRACER_PIN);
+
+    if (left_ir_tracer == 1 && right_ir_tracer == 0) {
+        motorControl.goCurve(0, 50);
+        delay(400);
+        motorControl.goForward();
+    } else if (left_ir_tracer == 0 && right_ir_tracer == 1) {
+        motorControl.goCurve(50, 0);
+        delay(400);
+        motorControl.goForward();
+    } else if (left_ir_tracer == 1 && right_ir_tracer == 1) {
+            std::cout << "zebra" << std::endl;
+    }
+}
+
+//right left thread
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
+
 void *rightLaneTurnThread(void *threadarg) {
     std::cout << "turn right thread" << std::endl;
     motorControl.setMotorGoingForward(false);
@@ -115,16 +145,17 @@ void *rightLaneTurnThread(void *threadarg) {
     delay(100);
     motorControl.goForward();
 }
+
 #pragma clang diagnostic pop
 
-void my_handler(int s){
-    printf("Caught signal %d\n",s);
+void my_handler(int s) {
+    printf("Caught signal %d\n", s);
     motorControl.stop();
     exit(1);
 
 }
 
-void ctrl_c_stop_motor_signal_handler(){
+void ctrl_c_stop_motor_signal_handler() {
     struct sigaction sigIntHandler{};
 
     sigIntHandler.sa_handler = my_handler;

@@ -12,6 +12,8 @@
 
 #define MOTOR_START_DELAY	5 // 5
 
+#define LEFT_TRACER_PIN 10
+#define RIGHT_TRACER_PIN 11
 
 MotorControl::MotorControl()
 {
@@ -24,9 +26,19 @@ MotorControl::MotorControl()
     motorGoingBackward = false;
     motorGoingLeft = false;
     motorGoingRight = false;
+    if (wiringPiSetup() == -1)
+    {
+        std::cout << "WIRING ERROR"<<std::endl;
+        exit(1);
+    }
 	init();
+    initIrLineTracer();
 }
+void MotorControl::initIrLineTracer() {
+    pinMode(LEFT_TRACER_PIN, INPUT);
+    pinMode(RIGHT_TRACER_PIN, INPUT);
 
+}
 void MotorControl::init()
 {   
 	if(wiringPiSetup() == -1)

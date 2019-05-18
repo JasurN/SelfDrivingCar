@@ -7,9 +7,13 @@
 class MotorControl
 {
 public:
+#define LEFT_TRACER_PIN 10
+#define RIGHT_TRACER_PIN 11
     MotorControl();
 	
 	void init();
+
+    void initIrLineTracer();
 
 	void goForward();
 
