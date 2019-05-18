@@ -69,9 +69,9 @@ int main() {
         }
 
 
-//        imshow("full", dst);
-//        imshow("left", left_frame);
-//        imshow("right", right_frame);
+        imshow("full", dst);
+        imshow("left", left_frame);
+        imshow("right", right_frame);
         //cvWaitKey(200000);
         if (cvWaitKey(20) == 'q') // waitkey
         {
@@ -88,7 +88,7 @@ void *leftLaneTurnThread(void *threadarg) {
     std::cout<<"turn left thread" << std::endl;
     motorControl.setMotorGoingForward(false);
     motorControl.setMotorGoingLeft(true);
-    delay(800);
+    delay(400);
     motorControl.goCurve(50, 0);
     delay(1000);
     motorControl.setMotorGoingForward(true);
