@@ -41,7 +41,9 @@ int main() {
     while (1) {
         capture.grab(); //grab the scene using raspicam
         capture.retrieve(bgr); // retrieve the captured scene as an image and store it in matrix container
-
+        if (bgr.empty()) {
+            std::cout << "EMPTY";
+        }
         // These are detection function where you invoke the classifiers on to the frame to detect the trained elements
         cascade_becareful.detectMultiScale(bgr, becareful, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
         cascade_circle.detectMultiScale(bgr, circle, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
