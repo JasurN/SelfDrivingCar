@@ -209,12 +209,12 @@ void *checkControl(void *threadarg) {
 void obstacleAvoid() {
     std::cout << "STOPED BY OBSTACLE AVOID";
     goLeft();
-    delay(1400);
+    delay(800);
 //    goRight();
 //    delay(1000);
 //    goForward();
 //    delay(2000);
-
+stopDCMotor();
     exit(-1);
 }
 
