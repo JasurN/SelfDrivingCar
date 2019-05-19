@@ -9,14 +9,17 @@
 
 using namespace cv;
 using namespace std;
-int main()
-{
 
+int main() {
+    raspicam::RaspiCam_Cv capture;
+    capture.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+    capture.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+    capture.open();
     //Initialise the image as a matrix container
     Mat bgr;
     // Initialise the cascade classifier containers and load them with the .xml file you obtained from the training
     CascadeClassifier cascade_becareful, cascade_circle, cascade_left,
-            cascade_stop,cascade_parking, cascade_right, cascade_forward;
+            cascade_stop, cascade_parking, cascade_right, cascade_forward;
     cascade_becareful.load("cas_becareful.xml");
     cascade_circle.load("cas_circle.xml");
     cascade_left.load("cas_left.xml");
@@ -25,10 +28,7 @@ int main()
     cascade_right.load("cas_right.xml");
     cascade_forward.load("cas_forward.xml");
 
-    raspicam::RaspiCam_Cv capture;
-    capture.set(CV_CAP_PROP_FRAME_WIDTH, 320);
-    capture.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
-    capture.open();
+
 
     // Container of signs
     vector<Rect> becareful;
@@ -38,8 +38,7 @@ int main()
     vector<Rect> parking;
     vector<Rect> right_;
     vector<Rect> forward;
-    while (1)
-    {
+    while (1) {
         capture.grab(); //grab the scene using raspicam
         capture.retrieve(bgr); // retrieve the captured scene as an image and store it in matrix container
 
@@ -52,33 +51,37 @@ int main()
         cascade_right.detectMultiScale(bgr, right_, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
         cascade_forward.detectMultiScale(bgr, forward, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
         // To draw rectangles around detected objects accordingly
-        for (unsigned i = 0; i<becareful.size(); i++)
-            rectangle(bgr,becareful[i], Scalar(255, 0, 0), 2, 1);
+        for (unsigned i = 0; i < becareful.size(); i++)
+            rectangle(bgr, becareful[i], Scalar(255, 0, 0), 2, 1);
 
-        for (unsigned j = 0; j<circle.size(); j++)
-            rectangle(bgr,circle[j], Scalar(255, 0, 0), 2, 1);
+        for (unsigned j = 0; j < circle.size(); j++)
+            rectangle(bgr, circle[j], Scalar(255, 0, 0), 2, 1);
 
-        for (unsigned k = 0; k<left_.size(); k++)
-            rectangle(bgr,left_[k], Scalar(255, 0, 0), 2, 1);
+        for (unsigned k = 0; k < left_.size(); k++)
+            rectangle(bgr, left_[k], Scalar(255, 0, 0), 2, 1);
 
-        for (unsigned l = 0; l<stop_.size(); l++)
+        for (unsigned l = 0; l < stop_.size(); l++)
             rectangle(bgr, stop_[l], Scalar(255, 0, 0), 2, 1);
 
-        for (unsigned m = 0; m<parking.size(); m++)
+        for (unsigned m = 0; m < parking.size(); m++)
             rectangle(bgr, parking[m], Scalar(255, 0, 0), 2, 1);
 
-        for (unsigned n = 0; n<right_.size(); n++)
+        for (unsigned n = 0; n < right_.size(); n++)
             rectangle(bgr, right_[n], Scalar(255, 0, 0), 2, 1);
 
-        for (unsigned o = 0; o<forward.size(); o++)
+        for (unsigned o = 0; o < forward.size(); o++)
             rectangle(bgr, forward[o], Scalar(255, 0, 0), 2, 1);
 
         imshow("original", bgr);
 
         if (cvWaitKey(20) == 'q') // waitkey
+        {
+            capture.release();
             break;
+        }
+
     }
-    capture.release(); // release the raspicam frame grabbing
+    // release the raspicam frame grabbing
 
     return 0;
 }
