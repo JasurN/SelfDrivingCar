@@ -60,6 +60,7 @@ void testDelay() {
     int delayTime = 0;
     std::cin >> delayTime;
     goLeft();
+    std::cout << delayTime<< std::endl;
     delay(delayTime);
     stopDCMotor();
 
