@@ -4,6 +4,8 @@
 #include <opencv/cv.h>
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc.hpp"
+#include <signal.h>
+
 
 using namespace cv;
 using namespace std;
@@ -20,6 +22,10 @@ using namespace std;
 #define NORMAL_SPEED   50                            //Speed limit
 
 #define MIN_SPEED   0
+
+void my_handler(int s);
+
+void ctrl_c_stop_motor_signal_handler();
 
 bool motorGoing = false;
 
@@ -43,6 +49,9 @@ int getDistance();
 int main() {
     if (wiringPiSetup() == -1)
         return 0;
+
+    ctrl_c_stop_motor_signal_handler();
+
     pthread_t pthreads[2];
     pinMode(IN1_PIN, OUTPUT);
     pinMode(IN2_PIN, OUTPUT);
@@ -183,6 +192,23 @@ void *checkControl(void *threadarg) {
         }
         delay(10);
     }
+}
+
+void my_handler(int s) {
+    printf("Caught signal %d\n", s);
+    stopDCMotor();
+    exit(1);
+
+}
+
+void ctrl_c_stop_motor_signal_handler() {
+    struct sigaction sigIntHandler{};
+
+    sigIntHandler.sa_handler = my_handler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
+
+    sigaction(SIGINT, &sigIntHandler, nullptr);
 }
 
 #pragma clang diagnostic pop
