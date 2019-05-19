@@ -194,7 +194,6 @@ void *checkControl(void *threadarg) {
                         std::cout << "inside if" << std::endl;
                         counter++;
                         motorGoing = true;
-                        continue;
                     }
                 }
             } else {
