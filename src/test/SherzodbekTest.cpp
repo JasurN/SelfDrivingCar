@@ -198,9 +198,8 @@ void *checkControl(void *threadarg) {
 }
 
 void my_handler(int s) {
-    printf("Caught signal %d\n", s);
+    printf("Caught signal1 %d\n", s);
     stopDCMotor();
-    delay(10000);
     exit(1);
 
 }
