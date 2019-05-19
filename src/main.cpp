@@ -188,6 +188,7 @@ void *checkControl(void *threadarg) {
                 if(checkpoint2) {
                     obstacleAvoid();
                 }
+                delay(1000);
             } else {
                 if (checkpoint1) {
                     checkpoint2 = true;
