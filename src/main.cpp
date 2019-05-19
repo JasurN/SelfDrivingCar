@@ -6,7 +6,6 @@
 #include "opencv2/imgproc.hpp"
 #include <signal.h>
 
-
 using namespace cv;
 using namespace std;
 
@@ -26,7 +25,6 @@ using namespace std;
 void my_handler(int s);
 
 void ctrl_c_stop_motor_signal_handler();
-
 
 void initSensorsDCMotor();
 
