@@ -5,8 +5,6 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc.hpp"
 #include <signal.h>
-#include <raspicam/raspicam_cv.h>
-
 
 
 using namespace cv;
@@ -25,13 +23,11 @@ using namespace std;
 
 #define MIN_SPEED   0
 
-int counter = 3;
-
 void my_handler(int s);
 
 void ctrl_c_stop_motor_signal_handler();
 
-bool motorGoing = true;
+bool motorGoing = false;
 
 void initSensorsDCMotor();
 
@@ -54,8 +50,6 @@ int main() {
     if (wiringPiSetup() == -1)
         return 0;
 
-
-
     ctrl_c_stop_motor_signal_handler();
 
     pthread_t pthreads[2];
@@ -69,11 +63,9 @@ int main() {
     stopDCMotor();
     int sensor_control = pthread_create(&pthreads[0], nullptr, checkControl, (void *) 1);
     if (sensor_control) {
-        std::cout << "Error:unable to create sensor1  thread," << sensor_control << std::endl;
+        std::cout << "Error:unableq to create sensor  thread," << sensor_control << std::endl;
     }
-    while (true) {
 
-    }
     pthread_exit(nullptr);
     return 0;
 }
@@ -181,25 +173,11 @@ void *checkControl(void *threadarg) {
         int nLValue = digitalRead(LEFT_TRACER_PIN);
         int nRValue = digitalRead(RIGHT_TRACER_PIN);
         int dis = getDistance();
-        if(counter == 1) {
-            printf("obstacle detected");
-            delay(5000);
-            //obstacle algo
-            continue;
-        }
+
         if ((nLValue == HIGH) && (nRValue == HIGH)) {
             if (dis <= LIMIT_DISTANCE) {
                 printf("distance - %d cm\n", dis);
-                motorGoing = false;
                 stopDCMotor();
-                while(motorGoing == false) {
-                    int dis = getDistance();
-                    if (dis > LIMIT_DISTANCE) {
-                        motorGoing = true;
-                        counter--;
-                    }
-                    delay(100);
-                }
             } else {
                 goForward();
             }
