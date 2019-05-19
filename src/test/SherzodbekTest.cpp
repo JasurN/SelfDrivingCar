@@ -181,10 +181,10 @@ void *checkControl(void *threadarg) {
             } else {
                 goForward();
             }
-        } else if (nLValue == HIGH && nRValue == LOW) {
+        } else if (nLValue == HIGH ) {
            // printf(" LEFT detect ~!!! MOVE  ");
             goLeft();
-        } else if (nRValue == HIGH && nLValue == LOW) {
+        } else if (nRValue == HIGH) {
            // printf(" RIGHT detect ~!!! MOVE  ");
             goRight();
         } else {
