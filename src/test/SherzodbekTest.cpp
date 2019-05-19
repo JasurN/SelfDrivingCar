@@ -21,6 +21,8 @@ using namespace std;
 
 #define MIN_SPEED   0
 
+bool motorGoing = false;
+
 void initSensorsDCMotor();
 
 //motor Control
@@ -158,22 +160,17 @@ int getDistance() {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 
 void *checkControl(void *threadarg) {
-    bool ultrasonicStopped = false;
     while (true) {
         int nLValue = digitalRead(LEFT_TRACER_PIN);
         int nRValue = digitalRead(RIGHT_TRACER_PIN);
         int dis = getDistance();
 
         if ((nLValue == HIGH) && (nRValue == HIGH)) {
-            if (dis <= LIMIT_DISTANCE && !ultrasonicStopped) {
-                ultrasonicStopped = true;
+            if (dis <= LIMIT_DISTANCE) {
                 printf("distance - %d cm\n", dis);
                 stopDCMotor();
-            } else if (ultrasonicStopped) {
-                std::cout << std::endl << "STOOPEEDDDDDDDDDDDD";
             } else {
                 goForward();
-
             }
         } else if (nLValue == HIGH && nRValue == LOW) {
             printf(" LEFT detect ~!!! MOVE  ");
