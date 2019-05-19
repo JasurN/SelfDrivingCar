@@ -27,12 +27,9 @@ void my_handler(int s);
 
 void ctrl_c_stop_motor_signal_handler();
 
-bool motorGoing = false;
 
 void initSensorsDCMotor();
 
-int counter = 0;
-//motor Control
 void goForward();
 
 void goLeft();
@@ -47,6 +44,9 @@ void *checkControl(void *threadarg);
 int getDistance();
 
 void obstacleAvoid();
+
+bool checkpoint1 = false;
+bool checkpoint2 = false;
 
 //thread function
 int main() {
@@ -68,7 +68,7 @@ int main() {
     if (sensor_control) {
         std::cout << "Error:unableq to create sensor  thread," << sensor_control << std::endl;
     }
-    while(true){
+    while (true) {
 
     }
     pthread_exit(nullptr);
@@ -178,41 +178,31 @@ void *checkControl(void *threadarg) {
         int nLValue = digitalRead(LEFT_TRACER_PIN);
         int nRValue = digitalRead(RIGHT_TRACER_PIN);
         int dis = getDistance();
-        pthread_t pthreadCounter;
         if ((nLValue == HIGH) && (nRValue == HIGH)) {
 
             if (dis <= LIMIT_DISTANCE) {
                 //printf("distance - %d cm\n", dis);
                 stopDCMotor();
-                motorGoing = false;
+                checkpoint1 = true;
 
-                while (motorGoing == false) {
-                    std::cout << "it is here" << std::endl;
-
-                    int dis = getDistance();
-                    if(counter > 3) {
-                        std::cout << "counter:  " <<counter;
-                        obstacleAvoid();
-                    }
-                    if (dis >= LIMIT_DISTANCE) {
-                        std::cout << "inside if" << std::endl;
-                        counter++;
-                        motorGoing = true;
-                    }
+                if(checkpoint2) {
+                    obstacleAvoid();
                 }
             } else {
+                if (checkpoint1) {
+                    checkpoint2 = true;
+                }
                 goForward();
             }
         } else if (nLValue == HIGH && nRValue == LOW) {
             // printf(" LEFT detect ~!!! MOVE  ");
             goLeft();
-            } else if (nRValue == HIGH && nLValue == LOW) {
-                // printf(" RIGHT detect ~!!! MOVE  ");
-                goRight();
-            } else if((nLValue == LOW) && (nRValue == LOW)){
+        } else if (nRValue == HIGH && nLValue == LOW) {
+            // printf(" RIGHT detect ~!!! MOVE  ");
+            goRight();
+        } else if ((nLValue == LOW) && (nRValue == LOW)) {
             goForward();
-        }
-        else {
+        } else {
             stopDCMotor();
         }
         delay(10);
