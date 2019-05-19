@@ -31,6 +31,7 @@ bool motorGoing = false;
 
 void initSensorsDCMotor();
 
+int counter = 0;
 //motor Control
 void goForward();
 
@@ -44,6 +45,8 @@ void stopDCMotor();
 void *checkControl(void *threadarg);
 
 int getDistance();
+
+void obstacleAvoid();
 
 //thread function
 int main() {
@@ -89,7 +92,7 @@ void initSensorsDCMotor() {
     softPwmCreate(IN4_PIN, MIN_SPEED, NORMAL_SPEED);
 }
 
-//Go Forward
+//Go FmotorGoingorward
 void goForward() {
 
     softPwmWrite(IN1_PIN, NORMAL_SPEED);
@@ -175,11 +178,21 @@ void *checkControl(void *threadarg) {
         int nLValue = digitalRead(LEFT_TRACER_PIN);
         int nRValue = digitalRead(RIGHT_TRACER_PIN);
         int dis = getDistance();
-
+        if(counter > 0) {
+            obstacleAvoid();
+        }
         if ((nLValue == HIGH) && (nRValue == HIGH)) {
             if (dis <= LIMIT_DISTANCE) {
                 printf("distance - %d cm\n", dis);
                 stopDCMotor();
+                motorGoing = false;
+                counter++;
+                while (motorGoing == false) {
+                    int dis = getDistance();
+                    if (dis >= LIMIT_DISTANCE) {
+                        motorGoing = true;
+                    }
+                }
             } else {
                 goForward();
             }
@@ -198,6 +211,13 @@ void *checkControl(void *threadarg) {
 
         //printf("left value: %d  right value: %d\n", nLValue, nRValue);
     }
+}
+
+void obstacleAvoid() {
+    stopDCMotor();
+    delay(10000);
+    std::cout << "STOPED BY OBSTACLE AVOID";
+
 }
 
 void my_handler(int s) {
