@@ -122,7 +122,7 @@ void testDelay() {
     //eight 3000
     std::cin >> delayTime;
     goForward();
-    delay(delayTime);
+    delay(4000);
     stopDCMotor();
 
 
