@@ -200,6 +200,7 @@ void *checkControl(void *threadarg) {
                         counter++;
                         motorGoing = true;
                         goForward();
+                        delay(500);
                     }
                 }
             } else {
