@@ -190,7 +190,7 @@ void *checkControl(void *threadarg) {
         } else {
             stopDCMotor();
         }
-        delay(10);
+        printf("left value: %d  right value: %d\n", nLValue, nRValue);
     }
 }
 
