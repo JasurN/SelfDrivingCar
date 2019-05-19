@@ -23,11 +23,13 @@ using namespace std;
 
 #define MIN_SPEED   0
 
+int counter = 3;
+
 void my_handler(int s);
 
 void ctrl_c_stop_motor_signal_handler();
 
-bool motorGoing = false;
+bool motorGoing = true;
 
 void initSensorsDCMotor();
 
@@ -173,11 +175,25 @@ void *checkControl(void *threadarg) {
         int nLValue = digitalRead(LEFT_TRACER_PIN);
         int nRValue = digitalRead(RIGHT_TRACER_PIN);
         int dis = getDistance();
-
+        if(counter == 1) {
+            printf("obstacle detected");
+            delay(5000);
+            //obstacle algo
+            continue;
+        }
         if ((nLValue == HIGH) && (nRValue == HIGH)) {
             if (dis <= LIMIT_DISTANCE) {
                 printf("distance - %d cm\n", dis);
+                motorGoing = false;
                 stopDCMotor();
+                while(motorGoing == false) {
+                    int dis = getDistance();
+                    if (dis > LIMIT_DISTANCE) {
+                        motorGoing = true;
+                        counter--;
+                    }
+                    delay(100);
+                }
             } else {
                 goForward();
             }
