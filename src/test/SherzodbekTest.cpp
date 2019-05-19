@@ -187,7 +187,9 @@ void *checkControl(void *threadarg) {
         } else if (nRValue == HIGH) {
            // printf(" RIGHT detect ~!!! MOVE  ");
             goRight();
-        } else if((nLValue == LOW) && (nRValue == LOW))
+        } else if((nLValue == LOW) && (nRValue == LOW)){
+            goForward();
+        }
         else {
             stopDCMotor();
         }
