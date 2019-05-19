@@ -95,7 +95,7 @@ void goForward() {
     softPwmWrite(IN3_PIN, NORMAL_SPEED);
     softPwmWrite(IN4_PIN, MIN_SPEED);
 
-    printf("Forward\n");
+   // printf("Forward\n");
 }
 
 //Go Backward
@@ -117,7 +117,7 @@ void goLeft() {
     softPwmWrite(IN3_PIN, NORMAL_SPEED);
     softPwmWrite(IN4_PIN, MIN_SPEED);
 
-    printf("Left\n");
+   // printf("Left\n");
 }
 
 //Go Right
@@ -139,7 +139,7 @@ void stopDCMotor() {
     softPwmWrite(IN3_PIN, MIN_SPEED);
     softPwmWrite(IN4_PIN, MIN_SPEED);
 
-    printf("Stop\n");
+    //printf("Stop\n");
 }
 
 //Get distance from ultrasonic
@@ -182,10 +182,10 @@ void *checkControl(void *threadarg) {
                 goForward();
             }
         } else if (nLValue == HIGH && nRValue == LOW) {
-            printf(" LEFT detect ~!!! MOVE  ");
+           // printf(" LEFT detect ~!!! MOVE  ");
             goLeft();
         } else if (nRValue == HIGH && nLValue == LOW) {
-            printf(" RIGHT detect ~!!! MOVE  ");
+           // printf(" RIGHT detect ~!!! MOVE  ");
             goRight();
         } else {
             stopDCMotor();
