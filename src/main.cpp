@@ -179,21 +179,19 @@ void *checkControl(void *threadarg) {
         int nRValue = digitalRead(RIGHT_TRACER_PIN);
         int dis = getDistance();
         if ((nLValue == HIGH) && (nRValue == HIGH)) {
-
             if (dis <= LIMIT_DISTANCE) {
-                //printf("distance - %d cm\n", dis);
+                printf("distance - %d cm\n", dis);
                 stopDCMotor();
+                delay(100);
                 checkpoint1 = true;
-
                 if(checkpoint2) {
                     obstacleAvoid();
                 }
-                delay(500);
             } else {
+                goForward();
                 if (checkpoint1) {
                     checkpoint2 = true;
                 }
-                goForward();
             }
         } else if (nLValue == HIGH && nRValue == LOW) {
             // printf(" LEFT detect ~!!! MOVE  ");
@@ -203,10 +201,7 @@ void *checkControl(void *threadarg) {
             goRight();
         } else if ((nLValue == LOW) && (nRValue == LOW)) {
             goForward();
-        } else {
-            stopDCMotor();
         }
-        delay(10);
         //printf("left value: %d  right value: %d\n", nLValue, nRValue);
     }
 }
@@ -214,6 +209,13 @@ void *checkControl(void *threadarg) {
 void obstacleAvoid() {
     stopDCMotor();
     std::cout << "STOPED BY OBSTACLE AVOID";
+    goLeft();
+    delay(1400);
+    goRight();
+    delay(1000);
+    goForward();
+    delay(2000);
+
     exit(-1);
 }
 
