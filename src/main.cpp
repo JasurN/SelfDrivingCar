@@ -180,15 +180,17 @@ void *checkControl(void *threadarg) {
         int dis = getDistance();
 
         if ((nLValue == HIGH) && (nRValue == HIGH)) {
-            if(counter > 0) {
-                obstacleAvoid();
-            }
+
             if (dis <= LIMIT_DISTANCE) {
                 //printf("distance - %d cm\n", dis);
                 stopDCMotor();
                 motorGoing = false;
+
                 while (motorGoing == false) {
                     std::cout << "it is here" << std::endl;
+                    if(counter > 1) {
+                        obstacleAvoid();
+                    }
                     int dis = getDistance();
                     if (dis >= LIMIT_DISTANCE) {
                         std::cout << "inside if" << std::endl;
