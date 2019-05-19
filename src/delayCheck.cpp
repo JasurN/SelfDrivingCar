@@ -9,10 +9,8 @@
 
 #define NORMAL_SPEED   50							//Speed limit
 #define MIN_SPEED   0
-#define 1100 delay_turn_45
 
 void testDelay();
-MotorControl motorControl;
 int main() {
     testDelay();
     return 0;
@@ -28,11 +26,63 @@ void goLeft()
     printf("Left\n");
 }
 
+void stopDCMotor() {
+
+    softPwmWrite(IN1_PIN, MIN_SPEED);
+    softPwmWrite(IN2_PIN, MIN_SPEED);
+    softPwmWrite(IN3_PIN, MIN_SPEED);
+    softPwmWrite(IN4_PIN, MIN_SPEED);
+
+    //printf("Stop\n");
+}
+
+//Go Right
+void goRight() {
+
+    softPwmWrite(IN1_PIN, NORMAL_SPEED);
+    softPwmWrite(IN2_PIN, MIN_SPEED);
+    softPwmWrite(IN3_PIN, MIN_SPEED);
+    softPwmWrite(IN4_PIN, NORMAL_SPEED);
+
+    // printf("Right\n");
+}
+
+void goForward() {
+
+    softPwmWrite(IN1_PIN, NORMAL_SPEED);
+    softPwmWrite(IN2_PIN, MIN_SPEED);
+    softPwmWrite(IN3_PIN, NORMAL_SPEED);
+    softPwmWrite(IN4_PIN, MIN_SPEED);
+
+    // printf("Forward\n");
+}
 void testDelay() {
     int delayTime = 0;
     std::cin >> delayTime;
     goLeft();
     delay(delayTime);
-    motorControl.stop();
+    stopDCMotor();
+
+
+    std::cin >> delayTime;
+    goForward();
+    delay(delayTime);
+    stopDCMotor();
+
+    std::cin >> delayTime;
+    goRight();
+    delay(delayTime);
+    stopDCMotor();
+
+    std::cin >> delayTime;
+    goLeft();
+    delay(delayTime);
+    stopDCMotor();
+
+    std::cin >> delayTime;
+    goForward();
+    delay(delayTime);
+    stopDCMotor();
+
     testDelay();
 }
