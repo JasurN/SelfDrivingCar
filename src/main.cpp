@@ -1,174 +1,208 @@
-#include <raspicam/raspicam_cv.h>
-#include "LaneDetection.h"
-#include "MotorControl.h"
-#include <pthread.h>
+#include <wiringPi.h>
+#include <softPwm.h>
+#include <iostream>
+#include <opencv/cv.h>
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgproc.hpp"
 #include <signal.h>
 
-MotorControl motorControl;
-LaneDetection laneDetection;
 
+using namespace cv;
+using namespace std;
 
-void *leftLaneTurnThread(void *threadarg);
+#define LEFT_TRACER_PIN                10            //- IRTracer
+#define RIGHT_TRACER_PIN            11
+#define TRIG_PIN                28                //Ultrasonic
+#define ECHO_PIN                29
+#define IN1_PIN        1                            // left motor
+#define IN2_PIN        4                            // left motor
+#define IN3_PIN        5                            // right motor
+#define IN4_PIN        6                            // right motor
+#define LIMIT_DISTANCE  20                        //Ultra limit distance for stop
+#define NORMAL_SPEED   40                            //Speed limit
 
-void *rightLaneTurnThread(void *threadarg);
-
-void *irLineTracerThread(void *threadarg);
+#define MIN_SPEED   0
 
 void my_handler(int s);
 
 void ctrl_c_stop_motor_signal_handler();
 
+bool motorGoing = false;
+
+void initSensorsDCMotor();
+
+//motor Control
+void goForward();
+
+void goLeft();
+
+void goRight();
+
+void stopDCMotor();
+
+//ultrasonic
+void *checkControl(void *threadarg);
+
+int getDistance();
+
+//thread function
 int main() {
+    if (wiringPiSetup() == -1)
+        return 0;
 
-    raspicam::RaspiCam_Cv capture;
-    capture.set(CV_CAP_PROP_FRAME_WIDTH, 320);
-    capture.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
-    capture.open();
-
-    cv::Rect full_roi(0, 150, 320, 90);
-    cv::Rect left_roi(0, 0, 160, 90);
-    cv::Rect right_roi(160, 0, 160, 90);
-    cv::Mat src;
-    cv::Mat src_roi;
-    cv::Mat dst;
-    cv::Mat left_frame, right_frame;
-
-    pthread_t pthreads[2];
-//    src = cv::imread("../12.png");
-//    resize(src, src, cv::Size(320, 240));
-
-    motorControl.goForward();
-    motorControl.setMotorGoing(true);
-    motorControl.setMotorGoingForward(true);
     ctrl_c_stop_motor_signal_handler();
 
-    while (true) {
-        capture.grab();
-        capture.retrieve(src);
-        src_roi = src(full_roi);
-        cvtColor(src_roi, src_roi, cv::COLOR_BGR2GRAY);
-        GaussianBlur(src_roi, src_roi, cv::Size(5, 5), 0);
-        Canny(src_roi, dst, 50, 200, 3);
+    pthread_t pthreads[2];
+    pinMode(IN1_PIN, OUTPUT);
+    pinMode(IN2_PIN, OUTPUT);
+    pinMode(IN3_PIN, OUTPUT);
+    pinMode(IN4_PIN, OUTPUT);
 
-        left_frame = dst(left_roi);
-        right_frame = dst(right_roi);
+    initSensorsDCMotor();
 
-        laneDetection.directionPrediction(laneDetection.left_angle_find(left_frame),
-                                          laneDetection.right_angle_find(right_frame));
-        //left turn thread
-//        if(laneDetection.getLeftDirectionCounter() >= 3
-//           && !motorControl.isMotorGoingLeft()) {
-//            motorControl.setMotorGoingLeft(true);
-//            laneDetection.setLeftDirectionCounter(0);
-//            int left_thread_result = pthread_create(&pthreads[0], nullptr, leftLaneTurnThread, (void *) 1);
-//            if (left_thread_result) {
-//                std::cout << "Error:unable to create left go thread," << left_thread_result << std::endl;
-//            }
-//            //right turn thread
-//        } else if (laneDetection.getRightDirectionCounter() >= 3) {
-//            laneDetection.setRightDirectionCounter(0);
-//            int right_thread_result = pthread_create(&pthreads[0], nullptr, rightLaneTurnThread, (void *) 2);
-//            if (right_thread_result) {
-//                std::cout << "Error:unable to create right go thread," << right_thread_result << std::endl;
-//            }
-//        }
-
-        int ir_line_thread_result = pthread_create(&pthreads[0], nullptr, irLineTracerThread, (void *) 3);
-        if (ir_line_thread_result) {
-            std::cout << "Error:unable to create left go thread," << ir_line_thread_result << std::endl;
-        }
-        imshow("full", dst);
-        imshow("left", left_frame);
-        imshow("right", right_frame);
-        //cvWaitKey(200000);
-        if (cvWaitKey(20) == 'q') // waitkey
-        {
-            motorControl.stop();
-            capture.release();
-            break;
-        }
+    stopDCMotor();
+    int sensor_control = pthread_create(&pthreads[0], nullptr, checkControl, (void *) 1);
+    if (sensor_control) {
+        std::cout << "Error:unableq to create sensor  thread," << sensor_control << std::endl;
     }
-}
-//left line thread
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
+    while(true){
 
-void *leftLaneTurnThread(void *threadarg) {
-    std::cout << "turn left thread" << std::endl;
-    motorControl.setMotorGoingForward(false);
-    motorControl.setMotorGoingLeft(true);
-    delay(400);
-    motorControl.goCurve(50, 0);
-    delay(1000);
-    motorControl.setMotorGoingForward(true);
-    motorControl.setMotorGoingLeft(false);
-    motorControl.stop();
-    delay(100);
-    motorControl.goForward();
-
+    }
+    pthread_exit(nullptr);
+    return 0;
 }
 
-#pragma clang diagnostic pop
+void initSensorsDCMotor() {
+    pinMode(TRIG_PIN, OUTPUT);
+    pinMode(ECHO_PIN, INPUT);
+    pinMode(LEFT_TRACER_PIN, INPUT);
+    pinMode(RIGHT_TRACER_PIN, INPUT);
+
+    pinMode(IN1_PIN, SOFT_PWM_OUTPUT);
+    pinMode(IN2_PIN, SOFT_PWM_OUTPUT);
+    pinMode(IN3_PIN, SOFT_PWM_OUTPUT);
+    pinMode(IN4_PIN, SOFT_PWM_OUTPUT);
+
+    softPwmCreate(IN1_PIN, MIN_SPEED, NORMAL_SPEED);
+    softPwmCreate(IN2_PIN, MIN_SPEED, NORMAL_SPEED);
+    softPwmCreate(IN3_PIN, MIN_SPEED, NORMAL_SPEED);
+    softPwmCreate(IN4_PIN, MIN_SPEED, NORMAL_SPEED);
+}
+
+//Go Forward
+void goForward() {
+
+    softPwmWrite(IN1_PIN, NORMAL_SPEED);
+    softPwmWrite(IN2_PIN, MIN_SPEED);
+    softPwmWrite(IN3_PIN, NORMAL_SPEED);
+    softPwmWrite(IN4_PIN, MIN_SPEED);
+
+    // printf("Forward\n");
+}
+
+//Go Backward
+void goBackward() {
+    softPwmWrite(IN1_PIN, MIN_SPEED);
+
+    softPwmWrite(IN2_PIN, NORMAL_SPEED);
+    softPwmWrite(IN3_PIN, MIN_SPEED);
+    softPwmWrite(IN4_PIN, NORMAL_SPEED);
+
+    printf("Back\n");
+}
+
+//Go Left
+void goLeft() {
+
+    softPwmWrite(IN1_PIN, MIN_SPEED);
+    softPwmWrite(IN2_PIN, NORMAL_SPEED);
+    softPwmWrite(IN3_PIN, NORMAL_SPEED);
+    softPwmWrite(IN4_PIN, MIN_SPEED);
+
+    // printf("Left\n");
+}
+
+//Go Right
+void goRight() {
+
+    softPwmWrite(IN1_PIN, NORMAL_SPEED);
+    softPwmWrite(IN2_PIN, MIN_SPEED);
+    softPwmWrite(IN3_PIN, MIN_SPEED);
+    softPwmWrite(IN4_PIN, NORMAL_SPEED);
+
+    // printf("Right\n");
+}
+
+//Stop DC Motor
+void stopDCMotor() {
+
+    softPwmWrite(IN1_PIN, MIN_SPEED);
+    softPwmWrite(IN2_PIN, MIN_SPEED);
+    softPwmWrite(IN3_PIN, MIN_SPEED);
+    softPwmWrite(IN4_PIN, MIN_SPEED);
+
+    //printf("Stop\n");
+}
+
+//Get distance from ultrasonic
+int getDistance() {
+    int start_time = 0, end_time = 0;
+    float distance = 0;
+
+    digitalWrite(TRIG_PIN, LOW);
+    delay(5);
+    digitalWrite(TRIG_PIN, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG_PIN, LOW);
+
+    while (digitalRead(ECHO_PIN) == 0);
+    start_time = micros();
+
+    while (digitalRead(ECHO_PIN) == 1);
+    end_time = micros();
+
+    distance = (end_time - start_time) / 29. / 2.;
+
+    return (int) distance;
+}
+
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 
-void *irLineTracerThread(void *threadarg) {
-    int left_ir_tracer, right_ir_tracer;
-    left_ir_tracer = digitalRead(LEFT_TRACER_PIN);
-    right_ir_tracer = digitalRead(RIGHT_TRACER_PIN);
+void *checkControl(void *threadarg) {
     while (true) {
-        if (left_ir_tracer == 0 && right_ir_tracer == 1
-            && !motorControl.turningIrLeft) {
-            motorControl.turningIrLeft = true;
-            std::cout << "go left" << std::endl;
-            motorControl.goCurve(0, 50);
-            delay(400);
-            motorControl.goForward();
-            motorControl.turningIrLeft = false;
+        int nLValue = digitalRead(LEFT_TRACER_PIN);
+        int nRValue = digitalRead(RIGHT_TRACER_PIN);
+        int dis = getDistance();
 
-        } else if (left_ir_tracer == 1 && right_ir_tracer == 0
-                   && !motorControl.turningIrRight) {
-            motorControl.turningIrRight = true;
-            std::cout << "go right" << std::endl;
-            motorControl.goCurve(50, 0);
-            delay(400);
-            motorControl.goForward();
-            motorControl.turningIrRight = false;
-
-        } else if (left_ir_tracer == 0 && right_ir_tracer == 0) {
-            std::cout << "zebra" << std::endl;
+        if ((nLValue == HIGH) && (nRValue == HIGH)) {
+            if (dis <= LIMIT_DISTANCE) {
+                printf("distance - %d cm\n", dis);
+                stopDCMotor();
+            } else {
+                goForward();
+            }
+        } else if (nLValue == HIGH && nRValue == LOW) {
+            // printf(" LEFT detect ~!!! MOVE  ");
+            goLeft();
+        } else if (nRValue == HIGH && nLValue == LOW) {
+            // printf(" RIGHT detect ~!!! MOVE  ");
+            goRight();
+        } else if((nLValue == LOW) && (nRValue == LOW)){
+            goForward();
         }
-        //printf("L = %d, R = %d\n", left_ir_tracer, right_ir_tracer);
-        delay(10);
+        else {
+            stopDCMotor();
+        }
+
+        //printf("left value: %d  right value: %d\n", nLValue, nRValue);
     }
 }
 
-#pragma clang diagnostic pop
-
-//right left thread
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
-
-void *rightLaneTurnThread(void *threadarg) {
-    std::cout << "turn right thread" << std::endl;
-    motorControl.setMotorGoingForward(false);
-    motorControl.setMotorGoingRight(true);
-    delay(800);
-    motorControl.goCurve(0, 50);
-    delay(1000);
-    motorControl.setMotorGoingForward(true);
-    motorControl.setMotorGoingRight(false);
-    motorControl.stop();
-    delay(100);
-    motorControl.goForward();
-}
-
-#pragma clang diagnostic pop
-
 void my_handler(int s) {
-    printf("Caught signal %d\n", s);
-    motorControl.stop();
+    printf("Caught signal1 %d\n", s);
+    stopDCMotor();
     exit(1);
 
 }
@@ -182,3 +216,8 @@ void ctrl_c_stop_motor_signal_handler() {
 
     sigaction(SIGINT, &sigIntHandler, nullptr);
 }
+
+#pragma clang diagnostic pop
+
+
+

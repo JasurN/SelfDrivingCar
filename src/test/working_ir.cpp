@@ -65,7 +65,9 @@ int main() {
     if (sensor_control) {
         std::cout << "Error:unableq to create sensor  thread," << sensor_control << std::endl;
     }
+    while(true){
 
+    }
     pthread_exit(nullptr);
     return 0;
 }
@@ -128,7 +130,7 @@ void goRight() {
     softPwmWrite(IN3_PIN, MIN_SPEED);
     softPwmWrite(IN4_PIN, NORMAL_SPEED);
 
-    printf("Right\n");
+   // printf("Right\n");
 }
 
 //Stop DC Motor
@@ -193,6 +195,7 @@ void *checkControl(void *threadarg) {
         else {
             stopDCMotor();
         }
+
         //printf("left value: %d  right value: %d\n", nLValue, nRValue);
     }
 }
