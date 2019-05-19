@@ -93,14 +93,22 @@ void testDelay() {
     stopDCMotor();
 
     std::cin >> delayTime;
-    goLeft();
+    goForward();
     delay(delayTime);
     stopDCMotor();
+
+
+    std::cin >> delayTime;
+    goLeft();
+    delay(delayTime);
+    stopDCMotor ();
 
     std::cin >> delayTime;
     goForward();
     delay(delayTime);
     stopDCMotor();
+
+
 
     testDelay();
 }
