@@ -116,14 +116,14 @@ void testDelay() {
     //std::cin >> delayTime;
     goLeft();
     std::cout << delayTime << std::endl;
-    delay(900);
+    delay(700);
     stopDCMotor();
 
-    //eight 3000
-    std::cin >> delayTime;
-    goForward();
-    delay(4000);
-    stopDCMotor();
+//    //eight 3000
+//    std::cin >> delayTime;
+//    goForward();
+//    delay(4000);
+//    stopDCMotor();
 
 
     testDelay();
