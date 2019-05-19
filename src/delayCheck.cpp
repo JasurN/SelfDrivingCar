@@ -78,48 +78,48 @@ void testDelay() {
     int delayTime = 0;
 
     //one 1000
-    std::cin >> delayTime;
+   // std::cin >> delayTime;
     goLeft();
     std::cout << delayTime << std::endl;
-    delay(delayTime);
+    delay(1000);
     stopDCMotor();
 //two 650
 
-    std::cin >> delayTime;
+  //  std::cin >> delayTime;
     goForward();
-    delay(delayTime);
+    delay(600);
     stopDCMotor();
 //three 900
-    std::cin >> delayTime;
+   // std::cin >> delayTime;
     goRight();
-    delay(delayTime);
+    delay(950);
     stopDCMotor();
 //four 1800
-    std::cin >> delayTime;
+  //  std::cin >> delayTime;
     goForward();
-    delay(delayTime);
+    delay(1700);
     stopDCMotor();
 
 // five 900
-    std::cin >> delayTime;
+    //std::cin >> delayTime;
     goRight();
-    delay(delayTime);
+    delay(900);
     stopDCMotor();
 
     //six 650
-    std::cin >> delayTime;
+    //std::cin >> delayTime;
     goForward();
-    delay(delayTime);
+    delay(600);
     stopDCMotor();
 
     //seven 1000
-    std::cin >> delayTime;
+    //std::cin >> delayTime;
     goLeft();
     std::cout << delayTime << std::endl;
-    delay(delayTime);
+    delay(900);
     stopDCMotor();
 
-    //six 3000
+    //eight 3000
     std::cin >> delayTime;
     goForward();
     delay(delayTime);
