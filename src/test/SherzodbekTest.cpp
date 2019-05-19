@@ -187,7 +187,8 @@ void *checkControl(void *threadarg) {
         } else if (nRValue == HIGH) {
            // printf(" RIGHT detect ~!!! MOVE  ");
             goRight();
-        } else {
+        } else if((nLValue == LOW) && (nRValue == LOW))
+        else {
             stopDCMotor();
         }
         printf("left value: %d  right value: %d\n", nLValue, nRValue);
@@ -197,6 +198,7 @@ void *checkControl(void *threadarg) {
 void my_handler(int s) {
     printf("Caught signal %d\n", s);
     stopDCMotor();
+    delay(10000);
     exit(1);
 
 }
