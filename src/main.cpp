@@ -32,7 +32,6 @@ bool motorGoing = false;
 void initSensorsDCMotor();
 
 int counter = 0;
-
 //motor Control
 void goForward();
 
@@ -69,7 +68,7 @@ int main() {
     if (sensor_control) {
         std::cout << "Error:unableq to create sensor  thread," << sensor_control << std::endl;
     }
-    while (true) {
+    while(true){
 
     }
     pthread_exit(nullptr);
@@ -191,16 +190,14 @@ void *checkControl(void *threadarg) {
                     std::cout << "it is here" << std::endl;
 
                     int dis = getDistance();
-                    if (counter > 1) {
-                        std::cout << "counter:  " << counter;
+                    if(counter > 3) {
+                        std::cout << "counter:  " <<counter;
                         obstacleAvoid();
                     }
                     if (dis >= LIMIT_DISTANCE) {
                         std::cout << "inside if" << std::endl;
                         counter++;
                         motorGoing = true;
-                        goForward();
-                        delay(500);
                     }
                 }
             } else {
@@ -209,12 +206,13 @@ void *checkControl(void *threadarg) {
         } else if (nLValue == HIGH && nRValue == LOW) {
             // printf(" LEFT detect ~!!! MOVE  ");
             goLeft();
-        } else if (nRValue == HIGH && nLValue == LOW) {
-            // printf(" RIGHT detect ~!!! MOVE  ");
-            goRight();
-        } else if ((nLValue == LOW) && (nRValue == LOW)) {
+            } else if (nRValue == HIGH && nLValue == LOW) {
+                // printf(" RIGHT detect ~!!! MOVE  ");
+                goRight();
+            } else if((nLValue == LOW) && (nRValue == LOW)){
             goForward();
-        } else {
+        }
+        else {
             stopDCMotor();
         }
         delay(10);
