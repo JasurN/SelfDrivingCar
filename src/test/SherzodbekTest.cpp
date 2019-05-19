@@ -5,6 +5,8 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc.hpp"
 #include <signal.h>
+#include <raspicam/raspicam_cv.h>
+
 
 
 using namespace cv;
@@ -52,6 +54,12 @@ int main() {
     if (wiringPiSetup() == -1)
         return 0;
 
+    raspicam::RaspiCam_Cv capture;
+    capture.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+    capture.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+    capture.open();
+    cv::Mat src;
+
     ctrl_c_stop_motor_signal_handler();
 
     pthread_t pthreads[2];
@@ -67,7 +75,10 @@ int main() {
     if (sensor_control) {
         std::cout << "Error:unable to create sensor  thread," << sensor_control << std::endl;
     }
-
+    while (true) {
+        capture.grab();
+        capture.retrieve(src);
+    }
     pthread_exit(nullptr);
     return 0;
 }
