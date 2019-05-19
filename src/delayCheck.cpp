@@ -2,15 +2,16 @@
 #include <iostream>
 #include <wiringPi.h>
 
-#define IN1_PIN		1							// left motor
-#define IN2_PIN		4							// left motor
-#define IN3_PIN		5							// right motor
-#define IN4_PIN		6
+#define IN1_PIN        1                            // left motor
+#define IN2_PIN        4                            // left motor
+#define IN3_PIN        5                            // right motor
+#define IN4_PIN        6
 
-#define NORMAL_SPEED   50							//Speed limit
+#define NORMAL_SPEED   50                            //Speed limit
 #define MIN_SPEED   0
 
 void testDelay();
+
 void initSensorsDCMotor() {
     if (wiringPiSetup() == -1)
         return;
@@ -32,8 +33,7 @@ int main() {
     return 0;
 }
 
-void goLeft()
-{
+void goLeft() {
 
     softPwmWrite(IN1_PIN, MIN_SPEED);
     softPwmWrite(IN2_PIN, NORMAL_SPEED);
@@ -73,41 +73,57 @@ void goForward() {
 
     // printf("Forward\n");
 }
+
 void testDelay() {
     int delayTime = 0;
+
+    //one 1000
     std::cin >> delayTime;
     goLeft();
-    std::cout << delayTime<< std::endl;
+    std::cout << delayTime << std::endl;
     delay(delayTime);
     stopDCMotor();
-
+//two 650
 
     std::cin >> delayTime;
     goForward();
     delay(delayTime);
     stopDCMotor();
+//three 900
+    std::cin >> delayTime;
+    goRight();
+    delay(delayTime);
+    stopDCMotor();
+//four 1800
+    std::cin >> delayTime;
+    goForward();
+    delay(delayTime);
+    stopDCMotor();
 
+// five 900
     std::cin >> delayTime;
     goRight();
     delay(delayTime);
     stopDCMotor();
 
+    //six 650
     std::cin >> delayTime;
     goForward();
     delay(delayTime);
     stopDCMotor();
 
-
+    //seven 1000
     std::cin >> delayTime;
     goLeft();
+    std::cout << delayTime << std::endl;
     delay(delayTime);
-    stopDCMotor ();
+    stopDCMotor();
 
+    //six 3000
     std::cin >> delayTime;
     goForward();
     delay(delayTime);
     stopDCMotor();
-
 
 
     testDelay();
