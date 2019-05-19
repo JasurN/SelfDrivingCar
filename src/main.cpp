@@ -178,19 +178,23 @@ void *checkControl(void *threadarg) {
         int nLValue = digitalRead(LEFT_TRACER_PIN);
         int nRValue = digitalRead(RIGHT_TRACER_PIN);
         int dis = getDistance();
-        if(counter > 0) {
-            obstacleAvoid();
-        }
+
         if ((nLValue == HIGH) && (nRValue == HIGH)) {
+            if(counter > 0) {
+                obstacleAvoid();
+            }
             if (dis <= LIMIT_DISTANCE) {
-                printf("distance - %d cm\n", dis);
+                //printf("distance - %d cm\n", dis);
                 stopDCMotor();
                 motorGoing = false;
-                counter++;
                 while (motorGoing == false) {
+                    std::cout << "it is here" << std::endl;
                     int dis = getDistance();
                     if (dis >= LIMIT_DISTANCE) {
+                        std::cout << "inside if" << std::endl;
+                        counter++;
                         motorGoing = true;
+                        continue;
                     }
                 }
             } else {
@@ -199,24 +203,26 @@ void *checkControl(void *threadarg) {
         } else if (nLValue == HIGH && nRValue == LOW) {
             // printf(" LEFT detect ~!!! MOVE  ");
             goLeft();
-        } else if (nRValue == HIGH && nLValue == LOW) {
-            // printf(" RIGHT detect ~!!! MOVE  ");
-            goRight();
-        } else if((nLValue == LOW) && (nRValue == LOW)){
+            } else if (nRValue == HIGH && nLValue == LOW) {
+                // printf(" RIGHT detect ~!!! MOVE  ");
+                goRight();
+            } else if((nLValue == LOW) && (nRValue == LOW)){
             goForward();
         }
         else {
             stopDCMotor();
         }
-
+        delay(10);
         //printf("left value: %d  right value: %d\n", nLValue, nRValue);
     }
 }
 
 void obstacleAvoid() {
     stopDCMotor();
-    delay(10000);
     std::cout << "STOPED BY OBSTACLE AVOID";
+    pthread_exit(NULL);
+    exit(-1);
+
 
 }
 
