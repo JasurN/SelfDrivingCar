@@ -12,7 +12,8 @@
 
 void testDelay();
 void initSensorsDCMotor() {
-
+    if (wiringPiSetup() == -1)
+        return;
 
     pinMode(IN1_PIN, SOFT_PWM_OUTPUT);
     pinMode(IN2_PIN, SOFT_PWM_OUTPUT);
