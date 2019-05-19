@@ -17,7 +17,7 @@ using namespace std;
 #define IN3_PIN        5                            // right motor
 #define IN4_PIN        6                            // right motor
 #define LIMIT_DISTANCE  20                        //Ultra limit distance for stop
-#define NORMAL_SPEED   50                            //Speed limit
+#define NORMAL_SPEED   40                            //Speed limit
 
 #define MIN_SPEED   0
 
@@ -181,6 +181,7 @@ void *checkControl(void *threadarg) {
         } else {
             stopDCMotor();
         }
+        delay(10);
     }
 }
 
