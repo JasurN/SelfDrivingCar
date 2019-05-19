@@ -194,6 +194,7 @@ void *checkControl(void *threadarg) {
                         std::cout << "inside if" << std::endl;
                         counter++;
                         motorGoing = true;
+
                     }
                 }
             } else {
@@ -219,10 +220,7 @@ void *checkControl(void *threadarg) {
 void obstacleAvoid() {
     stopDCMotor();
     std::cout << "STOPED BY OBSTACLE AVOID";
-    pthread_exit(NULL);
     exit(-1);
-
-
 }
 
 void my_handler(int s) {
