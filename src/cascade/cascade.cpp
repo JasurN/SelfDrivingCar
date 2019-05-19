@@ -53,26 +53,26 @@ int main() {
         cascade_right.detectMultiScale(bgr, right_, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
         cascade_forward.detectMultiScale(bgr, forward, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
         // To draw rectangles around detected objects accordingly
-        for (unsigned i = 0; i < becareful.size(); i++)
-            rectangle(bgr, becareful[i], Scalar(255, 0, 0), 2, 1);
+        for (const auto & i : becareful)
+            rectangle(bgr, i, Scalar(255, 0, 0), 2, 1);
 
-        for (unsigned j = 0; j < circle.size(); j++)
-            rectangle(bgr, circle[j], Scalar(255, 0, 0), 2, 1);
+//        for (const auto & j : circle)
+//            rectangle(bgr, j, Scalar(255, 0, 0), 2, 1);
+//
+//        for (const auto & k : left_)
+//            rectangle(bgr, k, Scalar(255, 0, 0), 2, 1);
 
-        for (unsigned k = 0; k < left_.size(); k++)
-            rectangle(bgr, left_[k], Scalar(255, 0, 0), 2, 1);
+        for (const auto & l : stop_)
+            rectangle(bgr, l, Scalar(255, 255, 255), 2, 1);
 
-        for (unsigned l = 0; l < stop_.size(); l++)
-            rectangle(bgr, stop_[l], Scalar(255, 0, 0), 2, 1);
+//        for (const auto & m : parking)
+//            rectangle(bgr, m, Scalar(255, 0, 0), 2, 1);
+//
+//        for (const auto & n : right_)
+//            rectangle(bgr, n, Scalar(255, 0, 0), 2, 1);
 
-        for (unsigned m = 0; m < parking.size(); m++)
-            rectangle(bgr, parking[m], Scalar(255, 0, 0), 2, 1);
-
-        for (unsigned n = 0; n < right_.size(); n++)
-            rectangle(bgr, right_[n], Scalar(255, 0, 0), 2, 1);
-
-        for (unsigned o = 0; o < forward.size(); o++)
-            rectangle(bgr, forward[o], Scalar(255, 0, 0), 2, 1);
+//        for (const auto & o : forward)
+//            rectangle(bgr, o, Scalar(255, 0, 0), 2, 1);
 
         imshow("original", bgr);
 
