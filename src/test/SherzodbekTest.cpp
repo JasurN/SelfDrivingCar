@@ -193,7 +193,7 @@ void *checkControl(void *threadarg) {
         else {
             stopDCMotor();
         }
-        printf("left value: %d  right value: %d\n", nLValue, nRValue);
+        //printf("left value: %d  right value: %d\n", nLValue, nRValue);
     }
 }
 
