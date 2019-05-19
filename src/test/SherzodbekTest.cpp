@@ -65,7 +65,7 @@ int main() {
     stopDCMotor();
     int sensor_control = pthread_create(&pthreads[0], nullptr, checkControl, (void *) 1);
     if (sensor_control) {
-        std::cout << "Error:unable to create sensor  thread," << sensor_control << std::endl;
+        std::cout << "Error:unable to create sensor1  thread," << sensor_control << std::endl;
     }
 
     pthread_exit(nullptr);
