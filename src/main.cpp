@@ -38,7 +38,6 @@ void goRight();
 
 void stopDCMotor();
 
-//ultrasonic
 void *checkControl(void *threadarg);
 
 int getDistance();
@@ -64,6 +63,7 @@ int main() {
     initSensorsDCMotor();
 
     stopDCMotor();
+    delay(2000);
     int sensor_control = pthread_create(&pthreads[0], nullptr, checkControl, (void *) 1);
     if (sensor_control) {
         std::cout << "Error:unableq to create sensor  thread," << sensor_control << std::endl;
@@ -209,12 +209,47 @@ void *checkControl(void *threadarg) {
 void obstacleAvoid() {
     std::cout << "STOPED BY OBSTACLE AVOID";
     goLeft();
-    delay(800);
-//    goRight();
-//    delay(1000);
-//    goForward();
-//    delay(2000);
-stopDCMotor();
+    delay(1000);
+    stopDCMotor();
+
+    goForward();
+    delay(600);
+    stopDCMotor();
+
+    goRight();
+    delay(950);
+    stopDCMotor();
+
+    goForward();
+    delay(1700);
+    stopDCMotor();
+
+    goRight();
+    delay(900);
+    stopDCMotor();
+
+    goForward();
+    delay(600);
+    stopDCMotor();
+
+    goLeft();
+    delay(900);
+    stopDCMotor();
+
+    //eight 3000
+    goForward();
+    delay(2500);
+    stopDCMotor();
+
+    goLeft();
+    delay(900);
+    stopDCMotor();
+
+    goForward();
+    delay(2500);
+    stopDCMotor();
+
+    stopDCMotor();
     exit(-1);
 }
 

@@ -40,7 +40,7 @@ void goLeft() {
     softPwmWrite(IN3_PIN, NORMAL_SPEED);
     softPwmWrite(IN4_PIN, MIN_SPEED);
 
-    printf("Left\n");
+  //  printf("Left\n");
 }
 
 void stopDCMotor() {
@@ -75,56 +75,50 @@ void goForward() {
 }
 
 void testDelay() {
-    int delayTime = 0;
 
-    //one 1000
-   // std::cin >> delayTime;
     goLeft();
-    std::cout << delayTime << std::endl;
     delay(1000);
     stopDCMotor();
-//two 650
 
-  //  std::cin >> delayTime;
     goForward();
     delay(600);
     stopDCMotor();
-//three 900
-   // std::cin >> delayTime;
+
+
     goRight();
     delay(950);
     stopDCMotor();
-//four 1800
-  //  std::cin >> delayTime;
+
+
     goForward();
     delay(1700);
     stopDCMotor();
 
-// five 900
-    //std::cin >> delayTime;
     goRight();
     delay(900);
     stopDCMotor();
 
-    //six 650
-    //std::cin >> delayTime;
     goForward();
     delay(600);
     stopDCMotor();
 
-    //seven 1000
-    //std::cin >> delayTime;
     goLeft();
-    std::cout << delayTime << std::endl;
-    delay(700);
+    delay(900);
     stopDCMotor();
 
-//    //eight 3000
-//    std::cin >> delayTime;
-//    goForward();
-//    delay(4000);
-//    stopDCMotor();
+    //eight 3000
+    goForward();
+    delay(2500);
+    stopDCMotor();
+
+    goLeft();
+    delay(900);
+    stopDCMotor();
+
+    goForward();
+    delay(2500);
+    stopDCMotor();
 
 
-    testDelay();
+  //  testDelay();
 }
