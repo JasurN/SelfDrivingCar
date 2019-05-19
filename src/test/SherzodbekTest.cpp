@@ -54,11 +54,7 @@ int main() {
     if (wiringPiSetup() == -1)
         return 0;
 
-    raspicam::RaspiCam_Cv capture;
-    capture.set(CV_CAP_PROP_FRAME_WIDTH, 320);
-    capture.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
-    capture.open();
-    cv::Mat src;
+
 
     ctrl_c_stop_motor_signal_handler();
 
@@ -76,8 +72,7 @@ int main() {
         std::cout << "Error:unable to create sensor1  thread," << sensor_control << std::endl;
     }
     while (true) {
-        capture.grab();
-        capture.retrieve(src);
+
     }
     pthread_exit(nullptr);
     return 0;
