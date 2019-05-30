@@ -40,7 +40,7 @@ public:
 
     int getRightDirectionCounter() const;
 
-    void setRightDirectionCounter(int rightDirectionCounter);
+    void setRightDirectionCounter(int rightDirectionCounterInputer);
 
 private:
     int LEFT_low_y = 55;

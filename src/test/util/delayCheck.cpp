@@ -1,4 +1,4 @@
-#include "MotorControl.h"
+#include "../../MotorControl.h"
 #include <iostream>
 #include <wiringPi.h>
 

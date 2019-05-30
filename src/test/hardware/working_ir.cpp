@@ -4,7 +4,7 @@
 #include <opencv/cv.h>
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc.hpp"
-#include <signal.h>
+#include <csignal>
 
 
 using namespace cv;
@@ -27,7 +27,6 @@ void my_handler(int s);
 
 void ctrl_c_stop_motor_signal_handler();
 
-bool motorGoing = false;
 
 void initSensorsDCMotor();
 
@@ -46,6 +45,8 @@ void *checkControl(void *threadarg);
 int getDistance();
 
 //thread function
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
 int main() {
     if (wiringPiSetup() == -1)
         return 0;
@@ -65,12 +66,16 @@ int main() {
     if (sensor_control) {
         std::cout << "Error:unableq to create sensor  thread," << sensor_control << std::endl;
     }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
     while(true){
 
     }
+#pragma clang diagnostic pop
     pthread_exit(nullptr);
     return 0;
 }
+#pragma clang diagnostic pop
 
 void initSensorsDCMotor() {
     pinMode(TRIG_PIN, OUTPUT);

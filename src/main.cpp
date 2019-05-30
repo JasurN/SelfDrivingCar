@@ -42,6 +42,8 @@ int getDistance();
 
 void obstacleAvoid();
 
+void enable_cascading();
+
 bool checkpoint1 = false;
 bool checkpoint2 = false;
 
@@ -63,6 +65,7 @@ int main() {
     stopDCMotor();
     delay(2000);
     int sensor_control = pthread_create(&pthreads[0], nullptr, checkControl, (void *) 1);
+    enable_cascading();
     if (sensor_control) {
         std::cout << "Error:unableq to create sensor  thread," << sensor_control << std::endl;
     }
@@ -71,6 +74,10 @@ int main() {
     }
     pthread_exit(nullptr);
     return 0;
+}
+
+void enable_cascading() {
+
 }
 
 void initSensorsDCMotor() {
@@ -192,15 +199,13 @@ void *checkControl(void *threadarg) {
                 }
             }
         } else if (nLValue == HIGH && nRValue == LOW) {
-            // printf(" LEFT detect ~!!! MOVE  ");
+
             goLeft();
         } else if (nRValue == HIGH && nLValue == LOW) {
-            // printf(" RIGHT detect ~!!! MOVE  ");
             goRight();
         } else if ((nLValue == LOW) && (nRValue == LOW)) {
             goForward();
         }
-        //printf("left value: %d  right value: %d\n", nLValue, nRValue);
     }
 }
 

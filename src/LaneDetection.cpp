@@ -1,9 +1,5 @@
 #include "LaneDetection.h"
 
-LaneDetection::LaneDetection() {
-
-}
-
 int LaneDetection::directionPrediction(double left_angle, double right_angle) {
     std::cout << "left angle:   " << left_angle << std::endl;
     std::cout << "right angle:  " << right_angle << std::endl;
@@ -26,10 +22,7 @@ double LaneDetection::right_angle_find(const cv::Mat &right_frame) {
         if (isLine) {
             double low_point_angle = ((atan2(RIGHT_low_y, RIGHT_low_x)) * 180 / 3.1415);
             double up_point_angle = ((atan2(RIGHT_up_y, RIGHT_up_x)) * 180 / 3.1415);
-//            std::cout << "low right angle: " << low_point_angle << endl;
-//            std::cout << "up right angle: " << up_point_angle << endl;
             double right_angle = up_point_angle - low_point_angle;
-            //std::cout << "right difference: " << right_angle << std::endl;
             return right_angle;
         }
     }
@@ -40,19 +33,14 @@ double LaneDetection::left_angle_find(const cv::Mat &left_frame) {
     left_lower_point(left_frame);
     left_upper_point(left_frame);
 
-//    cout << endl << "low x :" << LEFT_low_x;
-//    cout << endl << "LEFT_up_x :" << LEFT_up_x;
     if (LEFT_low_x > 0 && LEFT_up_x > 0) {
         bool isLine = check_left_line(left_frame);
 
         if (isLine) {
             double low_point_angle = ((atan2(LEFT_low_y, 90 - LEFT_low_x)) * 180 / 3.1415);
             double up_point_angle = ((atan2(LEFT_up_y, 90 - LEFT_up_x)) * 180 / 3.1415);
-//            std::cout << "low point: " << low_point_angle << endl;
-//            std::cout << "up point: " << up_point_angle << endl;
 
             double left_angle = up_point_angle - low_point_angle;
-            //std::cout << "left difference: " << left_angle << std::endl;
             return left_angle;
 
         }
@@ -71,7 +59,6 @@ void LaneDetection::right_upper_point(const cv::Mat &right_frame) {
             break;
         }
     }
-    //cout << endl << "up x :" << RIGHT_up_x;
 
 }
 
@@ -202,8 +189,8 @@ int LaneDetection::getRightDirectionCounter() const {
     return rightDirectionCounter;
 }
 
-void LaneDetection::setRightDirectionCounter(int rightDirectionCounter) {
-    LaneDetection::rightDirectionCounter = rightDirectionCounter;
+void LaneDetection::setRightDirectionCounter(int rightDirectionCounterInputer) {
+    LaneDetection::rightDirectionCounter = rightDirectionCounterInputer;
 }
 
 
