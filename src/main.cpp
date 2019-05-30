@@ -5,6 +5,7 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc.hpp"
 #include <signal.h>
+#include <raspicam/raspicam_cv.h>
 
 using namespace cv;
 using namespace std;
@@ -42,7 +43,7 @@ int getDistance();
 
 void obstacleAvoid();
 
-void enable_cascading();
+void *enable_cascading(void *threadArg);
 
 bool checkpoint1 = false;
 bool checkpoint2 = false;
@@ -61,14 +62,18 @@ int main() {
     pinMode(IN4_PIN, OUTPUT);
 
     initSensorsDCMotor();
-
     stopDCMotor();
     delay(2000);
-    int sensor_control = pthread_create(&pthreads[0], nullptr, checkControl, (void *) 1);
-    enable_cascading();
-    if (sensor_control) {
-        std::cout << "Error:unableq to create sensor  thread," << sensor_control << std::endl;
+    int sensor_thread_result = pthread_create(&pthreads[0], nullptr, checkControl, (void *) 1);
+    if (sensor_thread_result) {
+        std::cout << "Error:unable to create sensor  thread," << sensor_thread_result << std::endl;
     }
+
+    int cascade_thread_result = pthread_create(&pthreads[1], nullptr, enable_cascading, (void *) 2);
+    if (cascade_thread_result) {
+        std::cout << "Error:unable to create sensor  thread," << cascade_thread_result << std::endl;
+    }
+
     while (true) {
 
     }
@@ -76,9 +81,81 @@ int main() {
     return 0;
 }
 
-void enable_cascading() {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
 
+void *enable_cascading(void *threadArg) {
+    raspicam::RaspiCam_Cv capture;
+    capture.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+    capture.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+    capture.open();
+    Mat bgr;
+
+
+    CascadeClassifier cascade_becareful, cascade_circle, cascade_left,
+            cascade_stop, cascade_parking, cascade_right, cascade_forward;
+    cascade_becareful.load("cascade/cas_becareful.xml");
+    cascade_circle.load("cascade/cas_circle.xml");
+    cascade_left.load("cascade/cas_left.xml");
+    cascade_stop.load("cascade/cas_stop.xml");
+    cascade_parking.load("cascade/cas_parking.xml");
+    cascade_right.load("cascade/cas_right.xml");
+    cascade_forward.load("cascade/cas_forward.xml");
+    vector<Rect> becareful;
+    vector<Rect> circle;
+    vector<Rect> left_;
+    vector<Rect> stop_;
+    vector<Rect> parking;
+    vector<Rect> right_;
+    vector<Rect> forward;
+
+    while (true) {
+        capture.grab(); //grab the scene using raspicam
+        capture.retrieve(bgr); // retrieve the captured scene as an image and store it in matrix container
+        if (bgr.empty()) {
+            std::cout << "EMPTY";
+        }
+        // These are detection function where you invoke the classifiers on to the frame to detect the trained elements
+        cascade_becareful.detectMultiScale(bgr, becareful, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
+        cascade_circle.detectMultiScale(bgr, circle, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
+        cascade_left.detectMultiScale(bgr, left_, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
+        cascade_stop.detectMultiScale(bgr, stop_, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
+        cascade_parking.detectMultiScale(bgr, parking, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
+        cascade_right.detectMultiScale(bgr, right_, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
+        cascade_forward.detectMultiScale(bgr, forward, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(100, 100));
+        // To draw rectangles around detected objects accordingly
+        for (const auto &i : becareful) {
+            rectangle(bgr, i, Scalar(255, 0, 0), 2, 1);
+        }
+
+        for (const auto & j : circle) {
+            rectangle(bgr, j, Scalar(255, 0, 0), 2, 1);
+        }
+
+        for (const auto & k : left_) {
+            rectangle(bgr, k, Scalar(255, 0, 0), 2, 1);
+        }
+
+        for (const auto & l : stop_) {
+            rectangle(bgr, l, Scalar(255, 0, 0), 2, 1);
+        }
+
+        for (const auto & m : parking) {
+            rectangle(bgr, m, Scalar(255, 0, 0), 2, 1);
+        }
+
+        for (const auto & n : right_) {
+            rectangle(bgr, n, Scalar(255, 0, 0), 2, 1);
+        }
+
+        for (const auto & o : forward) {
+            rectangle(bgr, o, Scalar(255, 0, 0), 2, 1);
+        }
+        imshow("original", bgr);
+    }
 }
+
+#pragma clang diagnostic pop
 
 void initSensorsDCMotor() {
     pinMode(TRIG_PIN, OUTPUT);
@@ -189,7 +266,7 @@ void *checkControl(void *threadarg) {
                 stopDCMotor();
                 delay(100);
                 checkpoint1 = true;
-                if(checkpoint2) {
+                if (checkpoint2) {
                     obstacleAvoid();
                 }
             } else {

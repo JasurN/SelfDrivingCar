@@ -6,7 +6,7 @@
 #include <opencv2/imgproc.hpp>
 #include <iostream>
 #include <raspicam/raspicam_cv.h>
-
+//tesing purpose file
 using namespace cv;
 using namespace std;
 
